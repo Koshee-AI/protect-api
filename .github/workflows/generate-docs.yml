@@ -4,6 +4,11 @@ on:
   push:
     paths:
       - 'openapi.json'
+
+  workflow_dispatch:
+  release:
+    types: [published]
+
 jobs:
   build:
     runs-on: ubuntu-latest
