@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Generate README from OpenAPI spec
-      uses: seapagan/openapi-readme@v1.2.0
+      uses: seapagan/openapi-readme@v0.3.0
       with:
         SPEC_FILE: 'openapi.json'
         OUTPUT_FILE: 'PROTECT_API_README.md'
