@@ -11,7 +11,7 @@ The following shows a [python requests example](https://github.com/Koshee-AI/pro
 import requests
 
 ################################################################
-# Step 1: authenticate the user and password into a OATH2 token
+# Step 1: authenticate the user and password into OATH2 token
 ################################################################
 
 url = "http://127.0.0.1:80000"

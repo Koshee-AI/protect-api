@@ -30,7 +30,7 @@ def parse_args(args):
 options = parse_args(sys.argv[1:])
 
 ################################################################
-# Step 1: authenticate the user and password into a OATH2 token
+# Step 1: authenticate the user and password into an OATH2 token
 ################################################################
 
 data = {
