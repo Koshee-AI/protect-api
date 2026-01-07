@@ -1,8 +1,10 @@
 # Project Summary
 
-An OpenAPI definition for Koshee Protect server interaction
+An OpenAPI REST API definition for interacting with a Koshee Protect server
 
-# Hello World with Authentication
+## Hello World with Authentication
+
+The following shows a [python requests example](https://github.com/Koshee-AI/protect-api/blob/main/examples/auth_guide.py):
 
 ```
 
