@@ -22,7 +22,7 @@ jobs:
         # to load your openapi.json file into an output directory
         uses: Legion2/swagger-ui-action@v1
         with:
-          output: swagger-ui # Output directory for static files
+          output: docs # Output directory for static files
           spec-file: openapi.json # Path to your OpenAPI spec file
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -31,4 +31,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./swagger-ui # Directory containing the static files
+          publish_dir: ./docs # Directory containing the static files
