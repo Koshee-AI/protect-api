@@ -68,5 +68,8 @@ We provide guides on using the Koshee Protect API in the
 - [Replay Metadata Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_replay.py)
 - [Track Story Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_track_story.py)
 - [Run Detect Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_run_detect.py)
+- [Run Detect on Single Image Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_detect_image.py)
 - [Run Tracks Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_run_tracks.py)
 - [Get Processes Status Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_processes_status.py)
+- [Upload Picture Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_upload_to_pictures.py)
+- [Upload Video Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_upload_to_videos.py)
