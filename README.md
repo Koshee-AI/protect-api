@@ -2,7 +2,7 @@
 
 An OpenAPI REST API definition for interacting with a Koshee Protect server
 
-[https://koshee-ai.github.io/protect-api/](Swagger Docs)
+[Swagger Docs](https://koshee-ai.github.io/protect-api/)
 
 ## Hello World with Authentication
 
