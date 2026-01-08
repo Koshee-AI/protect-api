@@ -76,6 +76,6 @@ if response.status_code == 200:
   tracks_response = requests.get(f"{options.url}/processes/run_tracks",
     headers=headers, params=params)
 
-  detect_json = tracks_response.json()
+  tracks_json = tracks_response.json()
   print(f"/detect: Status Code: {tracks_response.status_code}")
-  print(f"/detect: Response Body: {detect_json}")
+  print(f"/detect: Response Body: {tracks_json}")
