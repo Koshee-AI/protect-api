@@ -61,3 +61,5 @@ if response.status_code == 200:
 
 We provide guides on using the Koshee Protect API in the
 [examples folder](https://github.com/Koshee-AI/protect-api/blob/main/examples)
+
+- [Replay Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_replay.py)
