@@ -1,33 +1,31 @@
-name: Deploy Swagger UI to GitHub Pages
+name: Deploy Swagger to GitHub Pages
 
 on:
   push:
     branches:
-      - main # or your default branch
+      - main # Trigger on pushes to the main branch (or your default branch)
     paths:
-      - 'openapi.json' # or the path to your spec file
+      - 'openapi.json' # Only run if openapi.json changes
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      pages: write      # Allow the action to create a deployment
-      contents: write   # Allow the action to write to the repository
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout Repo
+        uses: actions/checkout@v4 # Use the latest checkout action
 
       - name: Generate Swagger UI
+        # This action downloads Swagger UI static assets and configures them
+        # to load your openapi.json file into an output directory
         uses: Legion2/swagger-ui-action@v1
         with:
-          output: docs # Directory where UI files will be generated
-          spec-file: openapi.json
-          version: 5.x
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Automatically provided
+          output: swagger-ui # Output directory for static files
+          spec-file: openapi.json # Path to your OpenAPI spec file
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy to GitHub Pages
+        # This action pushes the generated files to the gh-pages branch
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs # Directory to deploy
+          publish_dir: ./swagger-ui # Directory containing the static files
