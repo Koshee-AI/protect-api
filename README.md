@@ -57,9 +57,14 @@ if response.status_code == 200:
 ```
 
 
-## Other Guides
+## Protect API Guides
 
 We provide guides on using the Koshee Protect API in the
 [examples folder](https://github.com/Koshee-AI/protect-api/blob/main/examples)
 
-- [Replay Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_replay.py)
+- [Intro to Authentication Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_auth.py)
+- [Replay Metadata Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_replay.py)
+- [Track Story Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_track.py)
+- [Run Detect Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_run_detect.py)
+- [Run Tracks Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_run_tracks.py)
+- [Get Processes Status Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_processes_status.py)

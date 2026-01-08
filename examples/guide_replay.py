@@ -15,7 +15,7 @@ def parse_args(args):
     dict: a map of arguments as defined by the parser
   """
   parser = argparse.ArgumentParser(
-    description="Example of authenticating with Koshee Protect REST API",
+    description="Example of pulling replay metadata via Koshee Protect REST API",
     add_help=True
   )
   parser.add_argument('--url', action='store',
@@ -91,12 +91,14 @@ if response.status_code == 200:
 
       data = {}
 
-      print(f"\nRetrieving sample_tracking replay dates")
-      dates_response = requests.get(f"{options.url}/replays/{config_name}/dates",
+      print(f"\nRetrieving {config_name} replay dates")
+      dates_response = requests.get(
+        f"{options.url}/replays/{config_name}/dates",
         headers=headers, data=data)
       
-      print(f"Retrieving sample_tracking replay cameras")
-      cameras_response = requests.get(f"{options.url}/replays/{config_name}/cameras",
+      print(f"Retrieving {config_name} replay cameras")
+      cameras_response = requests.get(
+        f"{options.url}/replays/{config_name}/cameras",
         headers=headers, data=data)
       
       if dates_response.status_code == 200:
@@ -130,7 +132,7 @@ if response.status_code == 200:
               f"{options.url}/replays/{config_name}/{camera}/{date}/metadata",
               headers=headers, data=data)
 
-            filename = f"{options.output}/{config_name}_{camera}_{date}.zip"
+            filename = f"{options.output}/replay_{config_name}_{camera}_{date}.zip"
             print(f"  Downloading {filename}")
             with open(filename, "wb") as zipfile:
               zipfile.write(metadata_response.content)
