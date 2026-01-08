@@ -68,6 +68,8 @@ To easily run these examples, it is best to add a "guides@koshee.ai" user with a
 However, this user should be deleted after using these guides so you do not have a low-security user
 that others might login to your server with.
 
+Provide any script with "-h" for detailed help
+
 - [Intro to Authentication Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_auth.py)
 - [Replay Metadata Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_replay.py)
 - [Track Story Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_track_story.py)
@@ -77,3 +79,8 @@ that others might login to your server with.
 - [Get Processes Status Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_processes_status.py)
 - [Upload Picture Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_upload_to_pictures.py)
 - [Upload Video Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_upload_to_videos.py)
+
+Example guide run:
+```
+python examples/guide_auth.py
+```
