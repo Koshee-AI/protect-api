@@ -55,3 +55,9 @@ if response.status_code == 200:
   print(f"/users/me: Status Code: {me_response.status_code}")
   print(f"/users/me: Response Body: {me_json}")
 ```
+
+
+## Other Guides
+
+We provide guides on using the Koshee Protect API in the
+[examples folder](https://github.com/Koshee-AI/protect-api/blob/main/examples)
