@@ -2,6 +2,8 @@
 
 An OpenAPI REST API definition for interacting with a Koshee Protect server
 
+[https://koshee-ai.github.io/protect-api/](Swagger Docs)
+
 ## Hello World with Authentication
 
 The following shows a [python requests example](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_auth.py):
