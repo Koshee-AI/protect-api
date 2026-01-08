@@ -39,7 +39,7 @@ data = {
   "password": options.password,
 }
 
-print(f"Attempting to login to {options.url} with username={options.username}")
+print(f"Logging into login to {options.url} with username={options.username}")
 
 response = requests.post(f"{options.url}/token", data=data)
 token = None
@@ -62,7 +62,7 @@ if response.status_code == 200:
 
   data = {}
 
-  print(f"\nAttempting to get authenticated user db entry")
+  print(f"\nRetrieving authenticated user db entry")
 
   me_response = requests.get(f"{options.url}/users/me", headers=headers, data=data)
 
