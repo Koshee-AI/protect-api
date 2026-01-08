@@ -10,6 +10,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      pages: write      # Allow the action to create a deployment
+      contents: write   # Allow the action to write to the repository
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4 # Use the latest checkout action
