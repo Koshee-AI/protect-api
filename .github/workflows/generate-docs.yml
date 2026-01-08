@@ -1,26 +1,33 @@
-name: Generate API Docs
+name: Deploy Swagger UI to GitHub Pages
 
 on:
   push:
+    branches:
+      - main # or your default branch
     paths:
-      - 'openapi.json'
-
-  workflow_dispatch:
-  release:
-    types: [published]
+      - 'openapi.json' # or the path to your spec file
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    permissions:
+      pages: write      # Allow the action to create a deployment
+      contents: write   # Allow the action to write to the repository
     steps:
-    - uses: actions/checkout@v4
-    - name: Generate README from OpenAPI spec
-      uses: seapagan/openapi-readme@v0.3.0
-      with:
-        SPEC_FILE: 'openapi.json'
-        OUTPUT_FILE: 'PROTECT_API_README.md'
-    - name: Commit changes
-      uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        commit_message: "Auto-generate API documentation"
-        files: PROTECT_API_README.md
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate Swagger UI
+        uses: Legion2/swagger-ui-action@v1
+        with:
+          output: docs # Directory where UI files will be generated
+          spec-file: openapi.json
+          version: 5.x
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Automatically provided
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs # Directory to deploy
