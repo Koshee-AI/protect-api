@@ -64,6 +64,10 @@ if response.status_code == 200:
 We provide guides on using the Koshee Protect API in the
 [examples folder](https://github.com/Koshee-AI/protect-api/blob/main/examples)
 
+To easily run these examples, it is best to add a "guides@koshee.ai" user with a password of "secret".
+However, this user should be deleted after using these guides so you do not have a low-security user
+that others might login to your server with.
+
 - [Intro to Authentication Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_auth.py)
 - [Replay Metadata Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_replay.py)
 - [Track Story Guide](https://github.com/Koshee-AI/protect-api/blob/main/examples/guide_track_story.py)
