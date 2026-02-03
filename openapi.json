@@ -1,6 +1,5 @@
 {
   "openapi": "3.1.0",
-  "swagger": "2.0",
   "info": {
     "title": "Koshee Protect",
     "summary": "API for interacting with Koshee Protect servers",
@@ -15,9 +14,8 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "0.9.3"
+    "version": "0.9.4"
   },
-
   "paths": {
     "/token/": {
       "post": {
@@ -4333,9 +4331,9 @@
         "tags": [
           "users"
         ],
-        "summary": "List Users On Server",
-        "description": "**Lists all servers along with user information in user database**",
-        "operationId": "list_users_on_server_users__get",
+        "summary": "List Rest Users On Server",
+        "description": "**Lists all servers along with user information in the REST user database**",
+        "operationId": "list_rest_users_on_server_users__get",
         "security": [
           {
             "OAuth2PasswordBearer": [
@@ -4391,7 +4389,7 @@
           "users"
         ],
         "summary": "Add User",
-        "description": "**Adds a user to the server**",
+        "description": "**Adds a REST user to the server**\n\nOn user_type: note that koshee users can only be added or modified by koshee users.\nAdmin user types can add admins and normal users. Normal users can\nmasquerade as local users (operating system users) if they are assigned\nto them by admin users.",
         "operationId": "add_user_users_add_post",
         "security": [
           {
@@ -4440,9 +4438,9 @@
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/UserTypes",
-              "description": "Type of user (koshee, admin, local)"
+              "description": "Type of user"
             },
-            "description": "Type of user (koshee, admin, local)"
+            "description": "Type of user"
           },
           {
             "name": "email",
@@ -4539,7 +4537,7 @@
           "users"
         ],
         "summary": "Add Local User Access",
-        "description": "**Adds a user to the server**",
+        "description": "**Adds a local user to an existing REST user's access list**\n\nLocal users are users that can login to Protect server as operating\nsystem users. Local users have home directories and can store files,\nrun Koshee Protect services, and other functions.\n\nREST users must masquerade as these local users.\nThis function **DOES NOT** add an operating system\nuser. It only adds a local operating system user that the REST user\ncan masquerade as.",
         "operationId": "add_local_user_access_users_add_local_user_access_post",
         "security": [
           {
@@ -4624,9 +4622,9 @@
         "tags": [
           "users"
         ],
-        "summary": "Add Local User Access",
+        "summary": "Delete User",
         "description": "**Adds a user to the server**",
-        "operationId": "add_local_user_access_users_delete_post",
+        "operationId": "delete_user_users_delete_post",
         "security": [
           {
             "OAuth2PasswordBearer": [
@@ -4693,7 +4691,7 @@
           "users"
         ],
         "summary": "List Local Users On Server",
-        "description": "**Lists all local users on the server**",
+        "description": "**Lists all local users on the server**\n\nLocal users are users that can login to Protect server as operating\nsystem users. Local users have home directories and can store files,\nrun Koshee Protect services, and other functions.",
         "operationId": "list_local_users_on_server_users_local_users_get",
         "security": [
           {
@@ -4750,7 +4748,7 @@
           "users"
         ],
         "summary": "Get Current User Info",
-        "description": "**Gets the current user access and info**",
+        "description": "**Gets the current REST user access and info**",
         "operationId": "get_current_user_info_users_me_get",
         "security": [
           {
@@ -4805,7 +4803,7 @@
           "users"
         ],
         "summary": "Update User",
-        "description": "**Updates user information or access on the server**",
+        "description": "**Updates REST user information or access on the server**\n\nOn user_type: note that koshee users can only be added or modified by koshee users.\nAdmin user types can add admins and normal users. Normal users can\nmasquerade as local users (operating system users) if they are assigned\nto them by admin users.",
         "operationId": "update_user_users_update_post",
         "security": [
           {
@@ -4875,10 +4873,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Type of user (koshee, admin, local)",
+              "description": "Type of user (normal, admin, koshee)",
               "title": "User Type"
             },
-            "description": "Type of user (koshee, admin, local)"
+            "description": "Type of user (normal, admin, koshee)"
           },
           {
             "name": "email",
@@ -5470,7 +5468,7 @@
       "UserTypes": {
         "type": "string",
         "enum": [
-          "local",
+          "normal",
           "admin",
           "koshee"
         ],
