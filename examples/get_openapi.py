@@ -21,7 +21,11 @@ def parse_args(args):
     default="http://127.0.0.1:8000")
   parser.add_argument('-o', '--output', action='store',
     dest='output', help='a file to save to',
-    default="openapi.json")
+    default="openapi.json"
+  )
+  parser.add_argument('--swagger', action='store',
+    dest='swagger', help='the swagger version to specify for docs gen',
+    default="2.0")
 
   return parser.parse_args(args)
 
@@ -41,6 +45,8 @@ openapi_json = response.json()
 
 if response.status_code == 200:
   try:
+    if options.swagger is not None:
+      openapi_json["swagger"] = options.swagger
     with open(options.output, 'w') as json_file:
       json.dump(openapi_json, json_file, indent=2)
     print(f"Data successfully saved to {options.output}")
