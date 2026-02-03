@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "0.9.5"
+    "version": "0.9.6"
   },
   "paths": {
     "/token/": {
