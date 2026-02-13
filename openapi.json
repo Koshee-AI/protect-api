@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "0.9.6"
+    "version": "0.9.8"
   },
   "paths": {
     "/token/": {
@@ -390,6 +390,112 @@
               "title": "Config Contents"
             },
             "description": "The new contents of the config file"
+          },
+          {
+            "name": "as_user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "the target local user (None means default local user)",
+              "title": "As User"
+            },
+            "description": "the target local user (None means default local user)"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/configs/delete": {
+      "get": {
+        "tags": [
+          "configs"
+        ],
+        "summary": "Delete Config",
+        "description": "**Deletes a config if it exists**",
+        "operationId": "delete_config_configs_delete_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "config_name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The name of the config file",
+              "title": "Config Name"
+            },
+            "description": "The name of the config file"
           },
           {
             "name": "as_user",
@@ -4797,6 +4903,204 @@
         }
       }
     },
+    "/users/me/update_email": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update My Email",
+        "description": "**Gets the user's email address**",
+        "operationId": "update_my_email_users_me_update_email_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Email address for user",
+              "title": "Email"
+            },
+            "description": "Email address for user"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me/update_full_name": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update My Name",
+        "description": "**Updates the user's full name**",
+        "operationId": "update_my_name_users_me_update_full_name_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "full_name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Full Name of user",
+              "title": "Full Name"
+            },
+            "description": "Full Name of user"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me/update_password": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update My Password",
+        "description": "**Updates the user's password. Does not force log out**",
+        "operationId": "update_my_password_users_me_update_password_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "password",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Password of user",
+              "title": "Password"
+            },
+            "description": "Password of user"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/update": {
       "post": {
         "tags": [
@@ -4913,6 +5217,143 @@
               "title": "Disabled"
             },
             "description": "If true, suspend user so they cannot login"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/update_scope": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update User Scope",
+        "description": "**Updates the user's scope, which can be any of the available scopes**\n\n  \"configs:read\",\n  \"configs:write\",\n  \"detect\",\n  \"pictures:read\",\n  \"pictures:write\",\n  \"logs:read\",\n  \"logs:write\",\n  \"preferences:read\",\n  \"preferences:write\",\n  \"processes:kill\",\n  \"processes:read\",\n  \"processes:run\",\n  \"replays:read\",\n  \"replays:write\",\n  \"tracks:read\",\n  \"videos:read\",\n  \"videos:write\",",
+        "operationId": "update_user_scope_users_update_scope_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "admin"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The REST user id",
+              "title": "Username"
+            },
+            "description": "The REST user id"
+          },
+          {
+            "name": "server",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The server to apply changes to (default=localhost)",
+              "title": "Server"
+            },
+            "description": "The server to apply changes to (default=localhost)"
+          },
+          {
+            "name": "local_user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Local server user to reference, defaults to all assigned users",
+              "title": "Local User"
+            },
+            "description": "Local server user to reference, defaults to all assigned users"
+          },
+          {
+            "name": "user_scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "List of scopes to enable on the user. Anything not on the list is disabled.",
+              "title": "User Scope"
+            },
+            "description": "List of scopes to enable on the user. Anything not on the list is disabled."
+          },
+          {
+            "name": "reset_to_full_normal_user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Reset the user scopes to full normal user scopes",
+              "default": false,
+              "title": "Reset To Full Normal User"
+            },
+            "description": "Reset the user scopes to full normal user scopes"
           },
           {
             "name": "version",
@@ -5498,6 +5939,13 @@
           "type": {
             "type": "string",
             "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
           }
         },
         "type": "object",
