@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "0.9.8"
+    "version": "0.9.11"
   },
   "paths": {
     "/token/": {
@@ -249,14 +249,14 @@
         }
       }
     },
-    "/configs/contents/{config_name}": {
+    "/configs/contents": {
       "get": {
         "tags": [
           "configs"
         ],
         "summary": "Get Config Contents",
         "description": "**Gets contents of a detector or camera config**",
-        "operationId": "get_config_contents_configs_contents__config_name__get",
+        "operationId": "get_config_contents_configs_contents_get",
         "security": [
           {
             "OAuth2PasswordBearer": [
@@ -267,7 +267,7 @@
         "parameters": [
           {
             "name": "config_name",
-            "in": "path",
+            "in": "query",
             "required": true,
             "schema": {
               "type": "string",
@@ -360,7 +360,7 @@
         ],
         "summary": "Save Config Contents",
         "description": "**Saves contents to a config file (will overwrite existing config files)**",
-        "operationId": "save_config_contents_configs_contents__config_name__post",
+        "operationId": "save_config_contents_configs_contents_post",
         "security": [
           {
             "OAuth2PasswordBearer": [
@@ -368,66 +368,27 @@
             ]
           }
         ],
-        "parameters": [
-          {
-            "name": "config_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The name of the config file",
-              "title": "Config Name"
-            },
-            "description": "The name of the config file"
-          },
-          {
-            "name": "config_contents",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The new contents of the config file",
-              "title": "Config Contents"
-            },
-            "description": "The new contents of the config file"
-          },
-          {
-            "name": "as_user",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfigContents"
+              },
+              "examples": {
+                "upload new detect config contents": {
+                  "summary": "upload new detect config contents",
+                  "description": "upload new detect config contents",
+                  "value": {
+                    "config_name": "detect_person",
+                    "config_contents": "{\"classifier\": {\"config\": {\"model\":\"person_33_mlnlca.trt\",\"conf\": 0.4,\"iou\": 0.5}},\"anomalies\": {},\"regularities\": {\"prompts\": [\"a person\"],\"keyframes\": [\"a person\"]},\"name\": \"detect_person\",\"conditionals\": []}",
+                    "as_user": "demo"
+                  }
                 }
-              ],
-              "description": "the target local user (None means default local user)",
-              "title": "As User"
-            },
-            "description": "the target local user (None means default local user)"
-          },
-          {
-            "name": "version",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "an API version to use, if different than current",
-              "title": "Version"
-            },
-            "description": "an API version to use, if different than current"
+              }
+            }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -692,6 +653,101 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logs/": {
+      "get": {
+        "tags": [
+          "logs"
+        ],
+        "summary": "Get Logs Available",
+        "description": "**Gets the logs available**",
+        "operationId": "get_logs_available_logs__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "as_user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "the target local user (None means default local user)",
+              "title": "As User"
+            },
+            "description": "the target local user (None means default local user)"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -1421,55 +1477,26 @@
             ]
           }
         ],
-        "parameters": [
-          {
-            "name": "preferences_contents",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "overrides for existing preferences file, json in string format",
-              "title": "Preferences Contents"
-            },
-            "description": "overrides for existing preferences file, json in string format"
-          },
-          {
-            "name": "as_user",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreferencesContents"
+              },
+              "examples": {
+                "upload new preferences contents": {
+                  "summary": "upload new preferences contents",
+                  "description": "upload new preferences contents",
+                  "value": {
+                    "preferences_contents": "{\"classifier\": {\"config\": {\"model\":\"person_33_mlnlca.trt\",\"conf\": 0.4,\"iou\": 0.5}},\"anomalies\": {},\"regularities\": {\"prompts\": [\"a person\"],\"keyframes\": [\"a person\"]},\"name\": \"detect_person\",\"conditionals\": []}",
+                    "as_user": "demo"
+                  }
                 }
-              ],
-              "description": "the target local user (None means default local user)",
-              "title": "As User"
-            },
-            "description": "the target local user (None means default local user)"
-          },
-          {
-            "name": "version",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "an API version to use, if different than current",
-              "title": "Version"
-            },
-            "description": "an API version to use, if different than current"
+              }
+            }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -2284,14 +2311,131 @@
         }
       }
     },
-    "/replays/{config_name}/cameras": {
+    "/replays/anomalies": {
+      "post": {
+        "tags": [
+          "replays"
+        ],
+        "summary": "Get Camera Anomalies",
+        "description": "**Gets anomalies from a start index to a max number of anomalies**\n\n  May return a zip of just the manifest if the results.json file has no\n  valid anomalies within the indexing range and available to user\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    index_start: the index (0..n) to start grabbing frames from\n    start_time: start time, if not using index (can be None for any start time)\n    end_time: end time, if not using index (can be None for any end time)\n    max_frames: the maximum frames to grab (up to 100)\n    include_originals: include original images when anomalies appear\n    version: an API version to use, if different than current",
+        "operationId": "get_camera_anomalies_replays_anomalies_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplayEvents"
+              },
+              "examples": {
+                "single camera with index range example": {
+                  "summary": "single camera index range example",
+                  "description": "single camera index range example",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "camera_1"
+                    ],
+                    "index_start": 0,
+                    "max_frames": 10,
+                    "include_originals": false,
+                    "as_user": "demo"
+                  }
+                },
+                "batch cameras with index range example": {
+                  "summary": "batch camera index range example",
+                  "description": "batch camera index range example",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "camera_1",
+                      "camera_2"
+                    ],
+                    "index_start": 0,
+                    "max_frames": 10,
+                    "include_originals": false,
+                    "as_user": "demo"
+                  }
+                },
+                "batch cameras with date range with originals": {
+                  "summary": "batch camera date range example with originals",
+                  "description": "batch camera date range example with originals",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "camera_1",
+                      "camera_2"
+                    ],
+                    "max_frames": 10,
+                    "start_time": "2024-04-04 00:00:00",
+                    "end_time": "2024-04-05 00:00:00",
+                    "include_originals": true,
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/replays/cameras": {
       "get": {
         "tags": [
           "replays"
         ],
         "summary": "Get Detect Replay Cameras",
         "description": "**Gets the cameras within a replay config directory**",
-        "operationId": "get_detect_replay_cameras_replays__config_name__cameras_get",
+        "operationId": "get_detect_replay_cameras_replays_cameras_get",
         "security": [
           {
             "OAuth2PasswordBearer": [
@@ -2302,7 +2446,7 @@
         "parameters": [
           {
             "name": "config_name",
-            "in": "path",
+            "in": "query",
             "required": true,
             "schema": {
               "type": "string",
@@ -2390,14 +2534,14 @@
         }
       }
     },
-    "/replays/{config_name}/dates": {
+    "/replays/dates": {
       "get": {
         "tags": [
           "replays"
         ],
         "summary": "Get Detect Replay Dates",
         "description": "**Gets the dates within a replay config directory**",
-        "operationId": "get_detect_replay_dates_replays__config_name__dates_get",
+        "operationId": "get_detect_replay_dates_replays_dates_get",
         "security": [
           {
             "OAuth2PasswordBearer": [
@@ -2408,7 +2552,7 @@
         "parameters": [
           {
             "name": "config_name",
-            "in": "path",
+            "in": "query",
             "required": true,
             "schema": {
               "type": "string",
@@ -2496,14 +2640,14 @@
         }
       }
     },
-    "/replays/{config_name}/delete": {
+    "/replays/delete": {
       "get": {
         "tags": [
           "replays"
         ],
         "summary": "Delete Config Replay Output",
         "description": "**deletes the replay output for a config**",
-        "operationId": "delete_config_replay_output_replays__config_name__delete_get",
+        "operationId": "delete_config_replay_output_replays_delete_get",
         "security": [
           {
             "OAuth2PasswordBearer": [
@@ -2514,7 +2658,7 @@
         "parameters": [
           {
             "name": "config_name",
-            "in": "path",
+            "in": "query",
             "required": true,
             "schema": {
               "type": "string",
@@ -2620,390 +2764,74 @@
         }
       }
     },
-    "/replays/{config_name}/{camera_name}/{date_folder}/anomalies": {
-      "get": {
-        "tags": [
-          "replays"
-        ],
-        "summary": "Get Camera Anomalies",
-        "description": "**Gets anomalies from a start index to a max number of anomalies**\n\n  May return a zip of just the manifest if the results.json file has no\n  valid anomalies within the indexing range and available to user\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    anomaly_index_start: the index (0..n) to start grabbing frames from\n    start_time: start time, if not using index (can be None for any start time)\n    end_time: end time, if not using index (can be None for any end time)\n    max_frames: the maximum frames to grab (up to 100)\n    include_originals: include original images when anomalies appear\n    version: an API version to use, if different than current",
-        "operationId": "get_camera_anomalies_replays__config_name___camera_name___date_folder__anomalies_get",
-        "security": [
-          {
-            "OAuth2PasswordBearer": [
-              "replays:read"
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "config_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The config dir name in replay dir",
-              "title": "Config Name"
-            },
-            "description": "The config dir name in replay dir"
-          },
-          {
-            "name": "camera_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The camera dir name in the replay dir",
-              "title": "Camera Name"
-            },
-            "description": "The camera dir name in the replay dir"
-          },
-          {
-            "name": "date_folder",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir",
-              "title": "Date Folder"
-            },
-            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
-          },
-          {
-            "name": "anomaly_index_start",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "the index (0..n) to start grabbing frames from",
-              "title": "Anomaly Index Start"
-            },
-            "description": "the index (0..n) to start grabbing frames from"
-          },
-          {
-            "name": "start_time",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "start time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any start time)",
-              "title": "Start Time"
-            },
-            "description": "start time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any start time)"
-          },
-          {
-            "name": "end_time",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "end time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any end time)",
-              "title": "End Time"
-            },
-            "description": "end time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any end time)"
-          },
-          {
-            "name": "max_frames",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "the maximum frames to grab (up to 100)",
-              "default": 100,
-              "title": "Max Frames"
-            },
-            "description": "the maximum frames to grab (up to 100)"
-          },
-          {
-            "name": "include_originals",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "description": "If true, include large original images",
-              "default": false,
-              "title": "Include Originals"
-            },
-            "description": "If true, include large original images"
-          },
-          {
-            "name": "as_user",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "the target local user (None means default local user)",
-              "title": "As User"
-            },
-            "description": "the target local user (None means default local user)"
-          },
-          {
-            "name": "version",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "an API version to use, if different than current",
-              "title": "Version"
-            },
-            "description": "an API version to use, if different than current"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "401": {
-            "description": "User is not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden local user as target",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/replays/{config_name}/{camera_name}/{date_folder}/keyframes": {
-      "get": {
+    "/replays/keyframes": {
+      "post": {
         "tags": [
           "replays"
         ],
         "summary": "Get Camera Keyframes",
-        "description": "**Gets keyframes from a start index to a max number of keyframes**\n\n  May return a zip of just the manifest if the results.json file has no\n  valid keyframes within the indexing range and available to user\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    keyframe_index_start: the index (0..n) to start grabbing frames from\n    start_time: start time, if not using index (can be None for any start time)\n    end_time: end time, if not using index (can be None for any end time)\n    max_frames: the maximum frames to grab (up to 100)\n    include_originals: include original images when keyframes appear\n    version: an API version to use, if different than current",
-        "operationId": "get_camera_keyframes_replays__config_name___camera_name___date_folder__keyframes_get",
-        "security": [
-          {
-            "OAuth2PasswordBearer": [
-              "replays:read"
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "config_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The config dir name in replay dir",
-              "title": "Config Name"
-            },
-            "description": "The config dir name in replay dir"
-          },
-          {
-            "name": "camera_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The camera dir name in the replay dir",
-              "title": "Camera Name"
-            },
-            "description": "The camera dir name in the replay dir"
-          },
-          {
-            "name": "date_folder",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir",
-              "title": "Date Folder"
-            },
-            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
-          },
-          {
-            "name": "keyframe_index_start",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "integer"
+        "description": "**Gets keyframes from a start index to a max number of keyframes**\n\n  May return a zip of just the manifest if the results.json file has no\n  valid keyframes within the indexing range and available to user\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    index_start: the index (0..n) to start grabbing frames from\n    start_time: start time, if not using index (can be None for any start time)\n    end_time: end time, if not using index (can be None for any end time)\n    max_frames: the maximum frames to grab (up to 100)\n    include_originals: include original images when keyframes appear\n    version: an API version to use, if different than current",
+        "operationId": "get_camera_keyframes_replays_keyframes_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplayEvents"
+              },
+              "examples": {
+                "single camera with index range example": {
+                  "summary": "single camera index range example",
+                  "description": "single camera index range example",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "camera_1"
+                    ],
+                    "index_start": 0,
+                    "max_frames": 10,
+                    "include_originals": false,
+                    "as_user": "demo"
+                  }
                 },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "the index (0..n) to start grabbing frames from",
-              "title": "Keyframe Index Start"
-            },
-            "description": "the index (0..n) to start grabbing frames from"
-          },
-          {
-            "name": "start_time",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
+                "batch cameras with index range example": {
+                  "summary": "batch camera index range example",
+                  "description": "batch camera index range example",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "camera_1",
+                      "camera_2"
+                    ],
+                    "index_start": 0,
+                    "max_frames": 10,
+                    "include_originals": false,
+                    "as_user": "demo"
+                  }
                 },
-                {
-                  "type": "null"
+                "batch cameras with date range with originals": {
+                  "summary": "batch camera date range example with originals",
+                  "description": "batch camera date range example with originals",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "camera_1",
+                      "camera_2"
+                    ],
+                    "max_frames": 10,
+                    "start_time": "2024-04-04 00:00:00",
+                    "end_time": "2024-04-05 00:00:00",
+                    "include_originals": true,
+                    "as_user": "demo"
+                  }
                 }
-              ],
-              "description": "start time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any start time)",
-              "title": "Start Time"
-            },
-            "description": "start time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any start time)"
+              }
+            }
           },
-          {
-            "name": "end_time",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "end time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any end time)",
-              "title": "End Time"
-            },
-            "description": "end time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any end time)"
-          },
-          {
-            "name": "max_frames",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "the maximum frames to grab (up to 100)",
-              "default": 100,
-              "title": "Max Frames"
-            },
-            "description": "the maximum frames to grab (up to 100)"
-          },
-          {
-            "name": "include_originals",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "description": "If true, include large original images",
-              "default": false,
-              "title": "Include Originals"
-            },
-            "description": "If true, include large original images"
-          },
-          {
-            "name": "as_user",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "the target local user (None means default local user)",
-              "title": "As User"
-            },
-            "description": "the target local user (None means default local user)"
-          },
-          {
-            "name": "version",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "an API version to use, if different than current",
-              "title": "Version"
-            },
-            "description": "an API version to use, if different than current"
-          }
-        ],
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -3043,273 +2871,62 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ]
       }
     },
-    "/replays/{config_name}/{camera_name}/{date_folder}/metadata": {
-      "get": {
+    "/replays/metadata": {
+      "post": {
         "tags": [
           "replays"
         ],
         "summary": "Get Camera Replay Metadata",
         "description": "**Gets all metadata files (camera|results|index.json) from the replay directory**\n\n  Returns all files in a zip file",
-        "operationId": "get_camera_replay_metadata_replays__config_name___camera_name___date_folder__metadata_get",
-        "security": [
-          {
-            "OAuth2PasswordBearer": [
-              "replays:read"
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "config_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The config dir name in replay dir",
-              "title": "Config Name"
-            },
-            "description": "The config dir name in replay dir"
-          },
-          {
-            "name": "camera_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The camera dir name in the replay dir",
-              "title": "Camera Name"
-            },
-            "description": "The camera dir name in the replay dir"
-          },
-          {
-            "name": "date_folder",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir",
-              "title": "Date Folder"
-            },
-            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
-          },
-          {
-            "name": "force_index_regen",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "description": "If true, force a regeneration of index.json",
-              "default": false,
-              "title": "Force Index Regen"
-            },
-            "description": "If true, force a regeneration of index.json"
-          },
-          {
-            "name": "as_user",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "the target local user (None means default local user)",
-              "title": "As User"
-            },
-            "description": "the target local user (None means default local user)"
-          },
-          {
-            "name": "version",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "an API version to use, if different than current",
-              "title": "Version"
-            },
-            "description": "an API version to use, if different than current"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "401": {
-            "description": "User is not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden local user as target",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/replays/{config_name}/{camera_name}/{date_folder}/originals": {
-      "get": {
-        "tags": [
-          "replays"
-        ],
-        "summary": "Get Camera Full Images",
-        "description": "**Gets original large camera images. Will ONLY return up to first 100 frame\n  id requests**\n\n  May return a zip of just the manifest if the frame_ids has no valid frames\n  that are still on disk and available to user",
-        "operationId": "get_camera_full_images_replays__config_name___camera_name___date_folder__originals_get",
-        "security": [
-          {
-            "OAuth2PasswordBearer": [
-              "replays:read"
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "config_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The config dir name in replay dir",
-              "title": "Config Name"
-            },
-            "description": "The config dir name in replay dir"
-          },
-          {
-            "name": "camera_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The camera dir name in the replay dir",
-              "title": "Camera Name"
-            },
-            "description": "The camera dir name in the replay dir"
-          },
-          {
-            "name": "date_folder",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir",
-              "title": "Date Folder"
-            },
-            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
-          },
-          {
-            "name": "frame_ids",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "integer"
+        "operationId": "get_camera_replay_metadata_replays_metadata_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplayMetadata"
               },
-              "description": "a list of frame ids to pull",
-              "title": "Frame Ids"
-            },
-            "description": "a list of frame ids to pull"
-          },
-          {
-            "name": "include_crops",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "description": "If true, include cropped images",
-              "default": false,
-              "title": "Include Crops"
-            },
-            "description": "If true, include cropped images"
-          },
-          {
-            "name": "include_frame_json",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "description": "If true, include frame jsons for metadata",
-              "default": false,
-              "title": "Include Frame Json"
-            },
-            "description": "If true, include frame jsons for metadata"
-          },
-          {
-            "name": "as_user",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
+              "examples": {
+                "single camera metadata pull": {
+                  "summary": "single camera metadata pull",
+                  "description": "single camera metadata pull",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "camera_1"
+                    ],
+                    "as_user": "demo"
+                  }
                 },
-                {
-                  "type": "null"
+                "batch camera pull after forcing index regen": {
+                  "summary": "batch camera pull after forcing index regen",
+                  "description": "batch camera pull after forcing index regen",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "camera_1",
+                      "camera_2"
+                    ],
+                    "force_index_regen": true,
+                    "as_user": "demo"
+                  }
                 }
-              ],
-              "description": "the target local user (None means default local user)",
-              "title": "As User"
-            },
-            "description": "the target local user (None means default local user)"
+              }
+            }
           },
-          {
-            "name": "version",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "an API version to use, if different than current",
-              "title": "Version"
-            },
-            "description": "an API version to use, if different than current"
-          }
-        ],
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -3349,204 +2966,87 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ]
       }
     },
-    "/replays/{config_name}/{camera_name}/{date_folder}/notifications": {
-      "get": {
+    "/replays/notifications": {
+      "post": {
         "tags": [
           "replays"
         ],
         "summary": "Get Camera Notifications",
         "description": "**Gets all metadata files (camera|results|index.json) from the replay directory**\n\n  Returns all files in a zip file",
-        "operationId": "get_camera_notifications_replays__config_name___camera_name___date_folder__notifications_get",
-        "security": [
-          {
-            "OAuth2PasswordBearer": [
-              "replays:read"
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "config_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The config dir name in replay dir",
-              "title": "Config Name"
-            },
-            "description": "The config dir name in replay dir"
-          },
-          {
-            "name": "camera_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The camera dir name in the replay dir",
-              "title": "Camera Name"
-            },
-            "description": "The camera dir name in the replay dir"
-          },
-          {
-            "name": "date_folder",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir",
-              "title": "Date Folder"
-            },
-            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
-          },
-          {
-            "name": "notifications_index_start",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "integer"
+        "operationId": "get_camera_notifications_replays_notifications_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationEvents"
+              },
+              "examples": {
+                "single camera with index range example": {
+                  "summary": "single camera index range example",
+                  "description": "single camera index range example",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "camera_1"
+                    ],
+                    "index_start": 0,
+                    "max_notifications": 10,
+                    "include_crops": true,
+                    "include_originals": false,
+                    "as_user": "demo"
+                  }
                 },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "the index (0..n) to start grabbing frames from",
-              "title": "Notifications Index Start"
-            },
-            "description": "the index (0..n) to start grabbing frames from"
-          },
-          {
-            "name": "start_time",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
+                "batch cameras with index range example": {
+                  "summary": "batch camera index range example",
+                  "description": "batch camera index range example",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "camera_1",
+                      "camera_2"
+                    ],
+                    "index_start": 0,
+                    "max_notifications": 10,
+                    "include_crops": true,
+                    "include_originals": false,
+                    "as_user": "demo"
+                  }
                 },
-                {
-                  "type": "null"
+                "batch cameras with date range with originals": {
+                  "summary": "batch camera date range example with originals",
+                  "description": "batch camera date range example with originals",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "camera_1",
+                      "camera_2"
+                    ],
+                    "max_notifications": 10,
+                    "start_time": "2024-04-04 00:00:00",
+                    "end_time": "2024-04-05 00:00:00",
+                    "include_crops": true,
+                    "include_originals": true,
+                    "as_user": "demo"
+                  }
                 }
-              ],
-              "description": "start time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any start time)",
-              "title": "Start Time"
-            },
-            "description": "start time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any start time)"
+              }
+            }
           },
-          {
-            "name": "end_time",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "end time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any end time)",
-              "title": "End Time"
-            },
-            "description": "end time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any end time)"
-          },
-          {
-            "name": "max_notifications",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "the maximum notifications to grab (up to 20)",
-              "default": 10,
-              "title": "Max Notifications"
-            },
-            "description": "the maximum notifications to grab (up to 20)"
-          },
-          {
-            "name": "include_crops",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "description": "If true, include cropped images",
-              "default": false,
-              "title": "Include Crops"
-            },
-            "description": "If true, include cropped images"
-          },
-          {
-            "name": "include_originals",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "description": "If true, include large original images",
-              "default": false,
-              "title": "Include Originals"
-            },
-            "description": "If true, include large original images"
-          },
-          {
-            "name": "force_index_regen",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "description": "If true, force a regeneration of index.json",
-              "default": false,
-              "title": "Force Index Regen"
-            },
-            "description": "If true, force a regeneration of index.json"
-          },
-          {
-            "name": "as_user",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "the target local user (None means default local user)",
-              "title": "As User"
-            },
-            "description": "the target local user (None means default local user)"
-          },
-          {
-            "name": "version",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "an API version to use, if different than current",
-              "title": "Version"
-            },
-            "description": "an API version to use, if different than current"
-          }
-        ],
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -3586,180 +3086,84 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ]
       }
     },
-    "/replays/{config_name}/{camera_name}/{date_folder}/regularities": {
-      "get": {
+    "/replays/regularities": {
+      "post": {
         "tags": [
           "replays"
         ],
-        "summary": "Get Camera Frames",
+        "summary": "Get Camera Regularity Frames",
         "description": "**Gets regularities from a start frame index to a maximum of max frames and\n  returns a zip and manifest of any files within the range** Note that this\n  is modeled to be similar to keyframes and anomalies, but regularities can\n  include frames that are original frames only and do not have any crops.\n  This function only returns the index.json file and any associated frames\n  that have a regularity, keyframe, and anomaly crop. With the index, you\n  can get any frame ids necessary for the originals function frame id list. \n\n  May return a zip of just the manifest if the range has no valid frames\n  and available to user\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    frame_index_start: the index (0..n) to start grabbing frames from\n    start_time: start time, if not using index (can be None for any start time)\n    end_time: end time, if not using index (can be None for any end time)\n    max_frames: the maximum frames to grab (up to 100)\n    include_originals: include original images when regularities appear\n    version: an API version to use, if different than current",
-        "operationId": "get_camera_frames_replays__config_name___camera_name___date_folder__regularities_get",
-        "security": [
-          {
-            "OAuth2PasswordBearer": [
-              "replays:read"
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "config_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The config dir name in replay dir",
-              "title": "Config Name"
-            },
-            "description": "The config dir name in replay dir"
-          },
-          {
-            "name": "camera_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The camera dir name in the replay dir",
-              "title": "Camera Name"
-            },
-            "description": "The camera dir name in the replay dir"
-          },
-          {
-            "name": "date_folder",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir",
-              "title": "Date Folder"
-            },
-            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
-          },
-          {
-            "name": "frame_index_start",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "integer"
+        "operationId": "get_camera_regularity_frames_replays_regularities_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplayEvents"
+              },
+              "examples": {
+                "single camera with index range example": {
+                  "summary": "single camera index range example",
+                  "description": "single camera index range example",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "camera_1"
+                    ],
+                    "index_start": 0,
+                    "max_frames": 10,
+                    "include_originals": false,
+                    "as_user": "demo"
+                  }
                 },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "the index (0..n) to start grabbing frames from",
-              "title": "Frame Index Start"
-            },
-            "description": "the index (0..n) to start grabbing frames from"
-          },
-          {
-            "name": "start_time",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
+                "batch cameras with index range example": {
+                  "summary": "batch camera index range example",
+                  "description": "batch camera index range example",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "camera_1",
+                      "camera_2"
+                    ],
+                    "index_start": 0,
+                    "max_frames": 10,
+                    "include_originals": false,
+                    "as_user": "demo"
+                  }
                 },
-                {
-                  "type": "null"
+                "batch cameras with date range with originals": {
+                  "summary": "batch camera date range example with originals",
+                  "description": "batch camera date range example with originals",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "camera_1",
+                      "camera_2"
+                    ],
+                    "max_frames": 10,
+                    "start_time": "2024-04-04 00:00:00",
+                    "end_time": "2024-04-05 00:00:00",
+                    "include_originals": true,
+                    "as_user": "demo"
+                  }
                 }
-              ],
-              "description": "start time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any start time)",
-              "title": "Start Time"
-            },
-            "description": "start time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any start time)"
+              }
+            }
           },
-          {
-            "name": "end_time",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "end time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any end time)",
-              "title": "End Time"
-            },
-            "description": "end time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any end time)"
-          },
-          {
-            "name": "max_frames",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "the maximum frames to grab (up to 100)",
-              "default": 100,
-              "title": "Max Frames"
-            },
-            "description": "the maximum frames to grab (up to 100)"
-          },
-          {
-            "name": "include_originals",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "description": "If true, include large original images",
-              "default": false,
-              "title": "Include Originals"
-            },
-            "description": "If true, include large original images"
-          },
-          {
-            "name": "as_user",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "the target local user (None means default local user)",
-              "title": "As User"
-            },
-            "description": "the target local user (None means default local user)"
-          },
-          {
-            "name": "version",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "an API version to use, if different than current",
-              "title": "Version"
-            },
-            "description": "an API version to use, if different than current"
-          }
-        ],
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -3799,17 +3203,24 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ]
       }
     },
-    "/replays/{config_name}/stats": {
+    "/replays/stats": {
       "get": {
         "tags": [
           "replays"
         ],
         "summary": "Get Output Config Folder Stats",
         "description": "**Gets stats on captions and frames analyzed in an output folder**",
-        "operationId": "get_output_config_folder_stats_replays__config_name__stats_get",
+        "operationId": "get_output_config_folder_stats_replays_stats_get",
         "security": [
           {
             "OAuth2PasswordBearer": [
@@ -3820,7 +3231,7 @@
         "parameters": [
           {
             "name": "config_name",
-            "in": "path",
+            "in": "query",
             "required": true,
             "schema": {
               "type": "string",
@@ -4021,14 +3432,14 @@
         }
       }
     },
-    "/tracks/{config_name}/{track_id}/story": {
+    "/tracks/story": {
       "get": {
         "tags": [
           "tracks"
         ],
         "summary": "Get Track Results Story",
         "description": "**Gets the config names with output in the user tracks directory**",
-        "operationId": "get_track_results_story_tracks__config_name___track_id__story_get",
+        "operationId": "get_track_results_story_tracks_story_get",
         "security": [
           {
             "OAuth2PasswordBearer": [
@@ -4039,7 +3450,7 @@
         "parameters": [
           {
             "name": "config_name",
-            "in": "path",
+            "in": "query",
             "required": true,
             "schema": {
               "type": "string",
@@ -4050,7 +3461,7 @@
           },
           {
             "name": "track_id",
-            "in": "path",
+            "in": "query",
             "required": true,
             "schema": {
               "type": "string",
@@ -4162,14 +3573,14 @@
         }
       }
     },
-    "/tracks/{config_name}/{track_id}/story_originals": {
+    "/tracks/story_originals": {
       "get": {
         "tags": [
           "tracks"
         ],
         "summary": "Get Track Results Story Originals",
         "description": "**Gets the large original images that the track was found in**",
-        "operationId": "get_track_results_story_originals_tracks__config_name___track_id__story_originals_get",
+        "operationId": "get_track_results_story_originals_tracks_story_originals_get",
         "security": [
           {
             "OAuth2PasswordBearer": [
@@ -4180,7 +3591,7 @@
         "parameters": [
           {
             "name": "config_name",
-            "in": "path",
+            "in": "query",
             "required": true,
             "schema": {
               "type": "string",
@@ -4191,7 +3602,7 @@
           },
           {
             "name": "track_id",
-            "in": "path",
+            "in": "query",
             "required": true,
             "schema": {
               "type": "string",
@@ -4315,14 +3726,14 @@
         }
       }
     },
-    "/tracks/{config_name}/{track_id}/tracks": {
+    "/tracks/tracks": {
       "get": {
         "tags": [
           "tracks"
         ],
         "summary": "Get Tracked Images",
         "description": "**Gets the base tracks (the source images) used for tracking the track id**",
-        "operationId": "get_tracked_images_tracks__config_name___track_id__tracks_get",
+        "operationId": "get_tracked_images_tracks_tracks_get",
         "security": [
           {
             "OAuth2PasswordBearer": [
@@ -4333,7 +3744,7 @@
         "parameters": [
           {
             "name": "config_name",
-            "in": "path",
+            "in": "query",
             "required": true,
             "schema": {
               "type": "string",
@@ -4344,7 +3755,7 @@
           },
           {
             "name": "track_id",
-            "in": "path",
+            "in": "query",
             "required": true,
             "schema": {
               "type": "string",
@@ -4497,124 +3908,31 @@
         "summary": "Add User",
         "description": "**Adds a REST user to the server**\n\nOn user_type: note that koshee users can only be added or modified by koshee users.\nAdmin user types can add admins and normal users. Normal users can\nmasquerade as local users (operating system users) if they are assigned\nto them by admin users.",
         "operationId": "add_user_users_add_post",
-        "security": [
-          {
-            "OAuth2PasswordBearer": [
-              "admin"
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "new_username",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The REST user id",
-              "title": "New Username"
-            },
-            "description": "The REST user id"
-          },
-          {
-            "name": "full_name",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "Full Name of user",
-              "title": "Full Name"
-            },
-            "description": "Full Name of user"
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "Password of user",
-              "title": "Password"
-            },
-            "description": "Password of user"
-          },
-          {
-            "name": "user_type",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/UserTypes",
-              "description": "Type of user"
-            },
-            "description": "Type of user"
-          },
-          {
-            "name": "email",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddUser"
+              },
+              "examples": {
+                "add a new user": {
+                  "summary": "add a new user",
+                  "description": "add a new user",
+                  "value": {
+                    "new_username": "user1",
+                    "password": "a_password_8567",
+                    "full_name": "User 1",
+                    "user_type": "normal",
+                    "email": "user_1@myorg.org",
+                    "local_user": "demo",
+                    "disabled": false
+                  }
                 }
-              ],
-              "description": "Email address for user",
-              "title": "Email"
-            },
-            "description": "Email address for user"
+              }
+            }
           },
-          {
-            "name": "local_user",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Local server user to reference (not necessary for admin users)",
-              "title": "Local User"
-            },
-            "description": "Local server user to reference (not necessary for admin users)"
-          },
-          {
-            "name": "disabled",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "description": "If true, suspend user so they cannot login",
-              "default": false,
-              "title": "Disabled"
-            },
-            "description": "If true, suspend user so they cannot login"
-          },
-          {
-            "name": "version",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "an API version to use, if different than current",
-              "title": "Version"
-            },
-            "description": "an API version to use, if different than current"
-          }
-        ],
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -4634,7 +3952,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "admin"
+            ]
+          }
+        ]
       }
     },
     "/users/add_local_user_access": {
@@ -4645,62 +3970,26 @@
         "summary": "Add Local User Access",
         "description": "**Adds a local user to an existing REST user's access list**\n\nLocal users are users that can login to Protect server as operating\nsystem users. Local users have home directories and can store files,\nrun Koshee Protect services, and other functions.\n\nREST users must masquerade as these local users.\nThis function **DOES NOT** add an operating system\nuser. It only adds a local operating system user that the REST user\ncan masquerade as.",
         "operationId": "add_local_user_access_users_add_local_user_access_post",
-        "security": [
-          {
-            "OAuth2PasswordBearer": [
-              "admin"
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The REST user id",
-              "title": "Username"
-            },
-            "description": "The REST user id"
-          },
-          {
-            "name": "local_user",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddLocalUser"
+              },
+              "examples": {
+                "add a local OS user for a REST user to masquerade as": {
+                  "summary": "adds a local OS user for a REST user to masquerade as",
+                  "description": "adds a local OS user for a REST user to masquerade as",
+                  "value": {
+                    "username": "user1",
+                    "local_user": "demo"
+                  }
                 }
-              ],
-              "description": "Local server user to reference",
-              "title": "Local User"
-            },
-            "description": "Local server user to reference"
+              }
+            }
           },
-          {
-            "name": "version",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "an API version to use, if different than current",
-              "title": "Version"
-            },
-            "description": "an API version to use, if different than current"
-          }
-        ],
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -4720,7 +4009,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "admin"
+            ]
+          }
+        ]
       }
     },
     "/users/delete": {
@@ -4731,44 +4027,25 @@
         "summary": "Delete User",
         "description": "**Adds a user to the server**",
         "operationId": "delete_user_users_delete_post",
-        "security": [
-          {
-            "OAuth2PasswordBearer": [
-              "admin"
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The REST user id",
-              "title": "Username"
-            },
-            "description": "The REST user id"
-          },
-          {
-            "name": "version",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteUser"
+              },
+              "examples": {
+                "delete a REST API user": {
+                  "summary": "delete a REST API user",
+                  "description": "delete a REST API user",
+                  "value": {
+                    "username": "user1"
+                  }
                 }
-              ],
-              "description": "an API version to use, if different than current",
-              "title": "Version"
-            },
-            "description": "an API version to use, if different than current"
-          }
-        ],
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -4788,7 +4065,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "admin"
+            ]
+          }
+        ]
       }
     },
     "/users/local_users": {
@@ -5043,42 +4327,25 @@
         "summary": "Update My Password",
         "description": "**Updates the user's password. Does not force log out**",
         "operationId": "update_my_password_users_me_update_password_post",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "password",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "Password of user",
-              "title": "Password"
-            },
-            "description": "Password of user"
-          },
-          {
-            "name": "version",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePassword"
+              },
+              "examples": {
+                "update the logged in user password": {
+                  "summary": "update the logged in user password",
+                  "description": "update the logged in user password",
+                  "value": {
+                    "password": "pass_1867"
+                  }
                 }
-              ],
-              "description": "an API version to use, if different than current",
-              "title": "Version"
-            },
-            "description": "an API version to use, if different than current"
-          }
-        ],
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -5098,7 +4365,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     },
     "/users/update": {
@@ -5109,134 +4381,44 @@
         "summary": "Update User",
         "description": "**Updates REST user information or access on the server**\n\nOn user_type: note that koshee users can only be added or modified by koshee users.\nAdmin user types can add admins and normal users. Normal users can\nmasquerade as local users (operating system users) if they are assigned\nto them by admin users.",
         "operationId": "update_user_users_update_post",
-        "security": [
-          {
-            "OAuth2PasswordBearer": [
-              "admin"
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The REST user id",
-              "title": "Username"
-            },
-            "description": "The REST user id"
-          },
-          {
-            "name": "full_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUser"
+              },
+              "examples": {
+                "update a user password": {
+                  "summary": "update a user password",
+                  "description": "update a user password",
+                  "value": {
+                    "username": "user1",
+                    "password": "a_password_8567"
+                  }
                 },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Full Name of user",
-              "title": "Full Name"
-            },
-            "description": "Full Name of user"
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
+                "update a user full name and email": {
+                  "summary": "update a user full name and email",
+                  "description": "update a user full name and email",
+                  "value": {
+                    "username": "user1",
+                    "full_name": "User 1",
+                    "email": "user_1@myorg.org"
+                  }
                 },
-                {
-                  "type": "null"
+                "update a user local user masquerade and disable user": {
+                  "summary": "update a user local user masquerade and disable user",
+                  "description": "update a user local user masquerade and disable user",
+                  "value": {
+                    "username": "user1",
+                    "local_user": "demo",
+                    "disabled": true
+                  }
                 }
-              ],
-              "description": "Password of user",
-              "title": "Password"
-            },
-            "description": "Password of user"
+              }
+            }
           },
-          {
-            "name": "user_type",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/UserTypes"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Type of user (normal, admin, koshee)",
-              "title": "User Type"
-            },
-            "description": "Type of user (normal, admin, koshee)"
-          },
-          {
-            "name": "email",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Email address for user",
-              "title": "Email"
-            },
-            "description": "Email address for user"
-          },
-          {
-            "name": "disabled",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "boolean"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "If true, suspend user so they cannot login",
-              "title": "Disabled"
-            },
-            "description": "If true, suspend user so they cannot login"
-          },
-          {
-            "name": "version",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "an API version to use, if different than current",
-              "title": "Version"
-            },
-            "description": "an API version to use, if different than current"
-          }
-        ],
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -5256,7 +4438,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "admin"
+            ]
+          }
+        ]
       }
     },
     "/users/update_scope": {
@@ -5747,6 +4936,142 @@
   },
   "components": {
     "schemas": {
+      "AddLocalUser": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "title": "Username",
+            "description": "The REST user id"
+          },
+          "local_user": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Local User",
+            "description": "server OS user to masquerade as"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "local_user"
+        ],
+        "title": "AddLocalUser",
+        "examples": [
+          {
+            "local_user": "demo",
+            "summary": "adds a local OS user for a REST user to masquerade as",
+            "username": "user1"
+          }
+        ]
+      },
+      "AddUser": {
+        "properties": {
+          "password": {
+            "type": "string",
+            "title": "Password"
+          },
+          "full_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Full Name",
+            "description": "Full Name of user"
+          },
+          "user_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UserTypes"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Type of user",
+            "default": "normal"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email",
+            "description": "Email address for user"
+          },
+          "local_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Local User",
+            "description": "server OS user to masquerade as"
+          },
+          "disabled": {
+            "type": "boolean",
+            "title": "Disabled",
+            "description": "If true, suspend user so they cannot login",
+            "default": false
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          },
+          "new_username": {
+            "type": "string",
+            "title": "New Username",
+            "description": "The REST user id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "new_username"
+        ],
+        "title": "AddUser",
+        "examples": [
+          {
+            "disabled": false,
+            "email": "user_1@myorg.org",
+            "full_name": "User 1",
+            "local_user": "demo",
+            "new_username": "user1",
+            "password": "a_password_8567",
+            "summary": "adds a new user",
+            "user_type": "normal"
+          }
+        ]
+      },
       "Body_detect_image_detect_image_post": {
         "properties": {
           "file": {
@@ -5851,6 +5176,88 @@
         ],
         "title": "Body_upload_video_videos_upload__post"
       },
+      "ConfigContents": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          },
+          "config_contents": {
+            "type": "string",
+            "title": "Config Contents"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name"
+        ],
+        "title": "ConfigContents",
+        "examples": [
+          {
+            "as_user": "demo",
+            "config_contents": "{\"classifier\": {\"config\": {\"model\":\"person_33_mlnlca.trt\",\"conf\": 0.4,\"iou\": 0.5}},\"anomalies\": {},\"regularities\": {\"prompts\": [\"a person\"],\"keyframes\": [\"a person\"]},\"name\": \"detect_person\",\"conditionals\": []}",
+            "config_name": "detect_person",
+            "summary": "upload new detect config contents"
+          }
+        ]
+      },
+      "DeleteUser": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "title": "Username",
+            "description": "The REST user id"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username"
+        ],
+        "title": "DeleteUser",
+        "examples": [
+          {
+            "summary": "deletes a REST API user",
+            "username": "user1"
+          }
+        ]
+      },
       "ErrorResponse": {
         "properties": {
           "message": {
@@ -5876,6 +5283,422 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "NotificationEvents": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "date_folder": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Folder"
+          },
+          "camera_name": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Camera Name",
+            "description": "The camera dir name in the replay dir (batch-capable).If only one camera, then single zip. If multiple cameras, then zip of multiple camera anomalies calls"
+          },
+          "index_start": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Index Start",
+            "description": "the index (0..n) to start grabbing notifications from"
+          },
+          "max_notifications": {
+            "type": "integer",
+            "exclusiveMaximum": 30.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Max Notifications",
+            "description": "the maximum notifications to grab",
+            "default": 10
+          },
+          "start_time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Time",
+            "description": "start time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any start time)"
+          },
+          "end_time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Time",
+            "description": "end time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any end time)"
+          },
+          "include_crops": {
+            "type": "boolean",
+            "title": "Include Crops",
+            "description": "If true, include crop images of detections",
+            "default": false
+          },
+          "include_originals": {
+            "type": "boolean",
+            "title": "Include Originals",
+            "description": "If true, include large original images",
+            "default": false
+          },
+          "force_index_regen": {
+            "type": "boolean",
+            "title": "Force Index Regen",
+            "description": "If true, force a regeneration of index.json",
+            "default": false
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name",
+          "camera_name"
+        ],
+        "title": "NotificationEvents",
+        "examples": [
+          {
+            "as_user": "demo",
+            "camera_name": [
+              "camera_1"
+            ],
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "include_crops": true,
+            "include_originals": false,
+            "index_start": 0,
+            "max_notifications": 10,
+            "summary": "single camera index range example"
+          },
+          {
+            "as_user": "demo",
+            "camera_name": [
+              "camera_1",
+              "camera_2"
+            ],
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "end_time": "2024-04-05 00:00:00",
+            "include_crops": true,
+            "include_originals": true,
+            "max_frames": 10,
+            "start_time": "2024-04-04 00:00:00",
+            "summary": "batch camera index range example with originals"
+          }
+        ]
+      },
+      "PreferencesContents": {
+        "properties": {
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          },
+          "preferences_contents": {
+            "type": "string",
+            "title": "Preferences Contents"
+          }
+        },
+        "type": "object",
+        "title": "PreferencesContents",
+        "examples": [
+          {
+            "as_user": "demo",
+            "preferences_contents": "{\"original_image_width\": 1120,\"original_image_height\": 640,\"replay_camera_width\": 400,\"replay_camera_height\": 300,\"replay_scheduler_threads\": 10,\"similarity_model_size\": 224,\"track_manager_delete_features_on_init\": false}",
+            "summary": "upload new detect config contents"
+          }
+        ]
+      },
+      "ReplayEvents": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "date_folder": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Folder"
+          },
+          "camera_name": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Camera Name",
+            "description": "The camera dir name in the replay dir (batch-capable).If only one camera, then single zip. If multiple cameras, then zip of multiple camera anomalies calls"
+          },
+          "index_start": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Index Start",
+            "description": "the index (0..n) to start grabbing frames from"
+          },
+          "max_frames": {
+            "type": "integer",
+            "exclusiveMaximum": 30.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Max Frames",
+            "description": "the maximum frames to grab",
+            "default": 10
+          },
+          "start_time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Time",
+            "description": "start time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any start time)"
+          },
+          "end_time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Time",
+            "description": "end time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any end time)"
+          },
+          "include_originals": {
+            "type": "boolean",
+            "title": "Include Originals",
+            "description": "If true, include large original images",
+            "default": false
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name",
+          "camera_name"
+        ],
+        "title": "ReplayEvents",
+        "examples": [
+          {
+            "as_user": "demo",
+            "camera_name": [
+              "camera_1"
+            ],
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "include_originals": false,
+            "index_start": 0,
+            "max_frames": 10,
+            "summary": "single camera index range example"
+          },
+          {
+            "as_user": "demo",
+            "camera_name": [
+              "camera_1",
+              "camera_2"
+            ],
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "end_time": "2024-04-05 00:00:00",
+            "include_originals": true,
+            "max_frames": 10,
+            "start_time": "2024-04-04 00:00:00",
+            "summary": "batch camera date range example with original images"
+          }
+        ]
+      },
+      "ReplayMetadata": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "date_folder": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Folder"
+          },
+          "camera_name": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Camera Name",
+            "description": "The camera dir name in the replay dir (batch-capable).If only one camera, then single zip. If multiple cameras, then zip of multiple camera anomalies calls"
+          },
+          "force_index_regen": {
+            "type": "boolean",
+            "title": "Force Index Regen",
+            "description": "If true, force a regeneration of index.json",
+            "default": false
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name",
+          "camera_name"
+        ],
+        "title": "ReplayMetadata",
+        "examples": [
+          {
+            "as_user": "demo",
+            "camera_name": [
+              "camera_1"
+            ],
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "summary": "single camera metadata pull"
+          },
+          {
+            "as_user": "demo",
+            "camera_name": [
+              "camera_1",
+              "camera_2"
+            ],
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "force_index_regen": true,
+            "summary": "batch camera pull after forcing index regen"
+          }
+        ]
       },
       "SortTypes": {
         "type": "string",
@@ -5905,6 +5728,131 @@
           "token_type"
         ],
         "title": "Token"
+      },
+      "UpdatePassword": {
+        "properties": {
+          "password": {
+            "type": "string",
+            "title": "Password"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "title": "UpdatePassword",
+        "examples": [
+          {
+            "password": "pass_1867",
+            "summary": "updates the logged in user password"
+          }
+        ]
+      },
+      "UpdateUser": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "title": "Username",
+            "description": "The REST user id"
+          },
+          "password": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Password"
+          },
+          "full_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Full Name",
+            "description": "Full Name of user"
+          },
+          "user_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UserTypes"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Type of user",
+            "default": "normal"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email",
+            "description": "Email address for user"
+          },
+          "local_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Local User",
+            "description": "server OS user to masquerade as"
+          },
+          "disabled": {
+            "type": "boolean",
+            "title": "Disabled",
+            "description": "If true, suspend user so they cannot login",
+            "default": false
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username"
+        ],
+        "title": "UpdateUser",
+        "examples": [
+          {
+            "password": "pass_1867",
+            "summary": "updates the logged in user password"
+          }
+        ]
       },
       "UserTypes": {
         "type": "string",
