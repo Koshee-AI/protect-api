@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "0.9.11"
+    "version": "0.9.14"
   },
   "paths": {
     "/token/": {
@@ -1468,7 +1468,7 @@
           "preferences"
         ],
         "summary": "Update Preferences",
-        "description": "**Overrides current user preferences with approved changes**. Note that not all\n  user preferences can be overridden. To see a list of preferences that are likely\n  to be allowed, call this method with a GET to see a filtered list of preferences.\n  These preferences can affect Protect's detect and track manager processes, as\n  well as the GUI functionality. It is recommended that interoperable and\n  accessibility settings such as font sizes are kept consistent for users of\n  external applications. Consequently, it is very likely that font sizes should\n  be consistent in preferences as applied to the Protect GUI as well as external\n  web or other applications.",
+        "description": "**Overrides current user preferences with approved changes**. Note that not all\n  user preferences can be overridden. To see a list of preferences that are likely\n  to be allowed, call this method with a GET to see a filtered list of preferences.\n  These preferences can affect Protect's detect and track manager processes, as\n  well as the GUI functionality. It is recommended that interoperable and\n  accessibility settings such as font sizes are kept consistent for users of\n  external applications. Consequently, it is very likely that font sizes should\n  be consistent in preferences as applied to the Protect GUI as well as external\n  web or other applications.\n\n  Each preference key is optional. You can even send an empty dictionary. The\n  following preferences are possible:\n\n  * fonts.labels.family: the font family (Roboto, Arial, Verdana, Helvetica)\n  * fonts.labels.size: the font size (>6)\n  * fonts.buttons.family: the font family (Roboto, Arial, Verdana, Helvetica)\n  * fonts.buttons.size: the font size (>6)\n  * fonts.dropdowns.family: the font family (Roboto, Arial, Verdana, Helvetica)\n  * fonts.dropdowns.size: the font size (>6)\n  * original_image_width: the pixel width to resize images to (should be close to model network width)\n  * resize_originals_policy: when to resize originals. \"None\", \"Always\", \"Live Camera Only\", \"Video File Only\"\n  * replay.event_min_type: default playback level. \"regularities\", \"keyframes\", \"anomalies\"\n  * model_policy: models that will show up in list. \"Nvidia\", \"AMD\", \"Intel\", \"Any\"\n  * replay_camera_width: pixel width of camera frames in Replay tab\n  * replay_camera_height: pixel height of camera frames in Replay tab (may be discarded to prefer aspect ratio)\n  * replay_controls_size: pixel width/height of control buttons like play, stop, etc.\n  * replay_show_labels: boolean where true means to display captions on frames during playback\n  * replay_scheduler_policy: replays allocate threads that can prioritize fairness or events. \"Fair\", \"Priority\"\n  * replay_has_keyframes_priority: priority of cameras that have keyframes in Priority scheduler policy\n  * replay_has_anomalies_priority: priority of cameras that have anomalies in Priority scheduler policy\n  * replay_has_unvisited_anomalies_priority: priority of cameras that have unvisited anomalies in Priority scheduler policy\n  * replay_scheduler_threads: number of threads to set for replay tab camera playback (>=1)\n  * replay_blur_detector: blur detector (e.g., detect_person) to use during camera replay (unused atm)\n  * track_blur_detector: blur detector (e.g., detect_person) to use during track tab copy originals function\n  * replay_show_cam_labels: boolean where true means to display camera labels on cameras\n  * similarity_model_size: how detailed to be in track similarity scoring (\"Normal\", \"Detailed\")",
         "operationId": "update_preferences_preferences__post",
         "security": [
           {
@@ -5463,10 +5463,15 @@
           },
           "preferences_contents": {
             "type": "string",
-            "title": "Preferences Contents"
+            "minLength": 2,
+            "title": "Preferences Contents",
+            "description": "The new contents of the preferences file"
           }
         },
         "type": "object",
+        "required": [
+          "preferences_contents"
+        ],
         "title": "PreferencesContents",
         "examples": [
           {
@@ -5887,13 +5892,6 @@
           "type": {
             "type": "string",
             "title": "Error Type"
-          },
-          "input": {
-            "title": "Input"
-          },
-          "ctx": {
-            "type": "object",
-            "title": "Context"
           }
         },
         "type": "object",
