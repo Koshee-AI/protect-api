@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "0.9.14"
+    "version": "0.9.16"
   },
   "paths": {
     "/token/": {
@@ -1114,6 +1114,88 @@
             }
           }
         }
+      }
+    },
+    "/pictures/copy/": {
+      "post": {
+        "tags": [
+          "pictures"
+        ],
+        "summary": "Copy Picture",
+        "operationId": "copy_picture_pictures_copy__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PictureCopy"
+              },
+              "examples": {
+                "copy images from a replay to Pictures": {
+                  "summary": "copy images from a replay to Pictures",
+                  "description": "copy images from a replay to Pictures",
+                  "value": {
+                    "target_filename": "suspect_1.jpg",
+                    "config_name": "sample_tracking",
+                    "camera_name": "camera_1",
+                    "frame_id": 100,
+                    "box_id": 1,
+                    "date_folder": "2026-03-01",
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "pictures:write",
+              "replays:read"
+            ]
+          }
+        ]
       }
     },
     "/pictures/delete": {
@@ -2372,6 +2454,104 @@
                     "end_time": "2024-04-05 00:00:00",
                     "include_originals": true,
                     "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/replays/batch": {
+      "post": {
+        "tags": [
+          "replays"
+        ],
+        "summary": "Get Camera Batches",
+        "description": "**Processes multiple camera retrievals with indexes, max frames, and event types**\n\n  Returns a zip that contains an additional zip file per camera specification",
+        "operationId": "get_camera_batches_replays_batch_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchList"
+              },
+              "examples": {
+                "two cameras with index ranges examples": {
+                  "description": "single camera index range example",
+                  "value": {
+                    "cameras": [
+                      {
+                        "summary": "single camera index range example",
+                        "config_name": "sample_tracking",
+                        "date_folder": "2026-01-01",
+                        "camera_name": "camera1_handgun_20240927_195958",
+                        "event_type": "keyframes",
+                        "index_start": 0,
+                        "max_frames": 10,
+                        "include_originals": false,
+                        "as_user": "demo"
+                      },
+                      {
+                        "summary": "single camera index range example",
+                        "config_name": "sample_tracking",
+                        "date_folder": "2026-01-01",
+                        "camera_name": "camera4_handgun_2024927_200000",
+                        "event_type": "anomalies",
+                        "index_start": 5,
+                        "max_frames": 10,
+                        "include_originals": true,
+                        "as_user": "demo"
+                      }
+                    ]
                   }
                 }
               }
@@ -5072,6 +5252,169 @@
           }
         ]
       },
+      "BatchEntry": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "camera_name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Camera Name",
+            "description": "The camera dir name in the replay dir"
+          },
+          "date_folder": {
+            "type": "string",
+            "title": "Date Folder"
+          },
+          "index_start": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Index Start",
+            "description": "the index (0..n) to start grabbing frames from"
+          },
+          "max_frames": {
+            "type": "integer",
+            "exclusiveMaximum": 30.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Max Frames",
+            "description": "the maximum frames to grab",
+            "default": 10
+          },
+          "include_originals": {
+            "type": "boolean",
+            "title": "Include Originals",
+            "description": "If true, include large original images",
+            "default": false
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          },
+          "event_type": {
+            "$ref": "#/components/schemas/EventType",
+            "description": "The minimum event type of interest",
+            "default": "regularities"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name",
+          "camera_name"
+        ],
+        "title": "BatchEntry",
+        "examples": [
+          {
+            "as_user": "demo",
+            "camera_name": "camera1_handgun_20240927_195958",
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "event_type": "keyframes",
+            "include_originals": false,
+            "index_start": 0,
+            "max_frames": 10,
+            "summary": "single camera index range example"
+          }
+        ]
+      },
+      "BatchList": {
+        "properties": {
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          },
+          "cameras": {
+            "items": {
+              "$ref": "#/components/schemas/BatchEntry"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Cameras",
+            "description": "a list of batch entries to process for files"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cameras"
+        ],
+        "title": "BatchList",
+        "examples": [
+          {
+            "cameras": [
+              {
+                "as_user": "demo",
+                "camera_name": "camera1_handgun_20240927_195958",
+                "config_name": "sample_tracking",
+                "date_folder": "2026-01-01",
+                "event_type": "keyframes",
+                "include_originals": false,
+                "index_start": 0,
+                "max_frames": 10,
+                "summary": "single camera index range example"
+              },
+              {
+                "as_user": "demo",
+                "camera_name": "camera4_handgun_2024927_200000",
+                "config_name": "sample_tracking",
+                "date_folder": "2026-01-01",
+                "event_type": "anomalies",
+                "include_originals": true,
+                "index_start": 5,
+                "max_frames": 10,
+                "summary": "single camera index range example"
+              }
+            ]
+          }
+        ]
+      },
       "Body_detect_image_detect_image_post": {
         "properties": {
           "file": {
@@ -5271,6 +5614,15 @@
         ],
         "title": "ErrorResponse"
       },
+      "EventType": {
+        "type": "string",
+        "enum": [
+          "regularities",
+          "keyframes",
+          "anomalies"
+        ],
+        "title": "EventType"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -5432,6 +5784,102 @@
             "max_frames": 10,
             "start_time": "2024-04-04 00:00:00",
             "summary": "batch camera index range example with originals"
+          }
+        ]
+      },
+      "PictureCopy": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "camera_name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Camera Name",
+            "description": "Camera name to refer to",
+            "default": "Camera"
+          },
+          "date_folder": {
+            "type": "string",
+            "title": "Date Folder"
+          },
+          "frame_id": {
+            "type": "integer",
+            "title": "Frame Id",
+            "description": "The image frame identifier (0+)",
+            "default": 0
+          },
+          "box_id": {
+            "type": "integer",
+            "title": "Box Id",
+            "description": "The box within image identifier (0+)",
+            "default": 0
+          },
+          "target_dir": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Dir",
+            "description": "directory to place file within user upload path"
+          },
+          "target_filename": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Filename",
+            "description": "filename to save copy as, if different than original upload name"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name"
+        ],
+        "title": "PictureCopy",
+        "examples": [
+          {
+            "as_user": "demo",
+            "box_id": 1,
+            "camera_name": "camera_1",
+            "config_name": "sample_tracking",
+            "date_folder": "2026-03-01",
+            "frame_id": 100,
+            "target_filename": "suspect_1.jpg"
           }
         ]
       },
@@ -5892,6 +6340,13 @@
           "type": {
             "type": "string",
             "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
           }
         },
         "type": "object",
