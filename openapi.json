@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "0.9.16"
+    "version": "0.9.17"
   },
   "paths": {
     "/token/": {
@@ -2714,6 +2714,94 @@
         }
       }
     },
+    "/replays/counts": {
+      "post": {
+        "tags": [
+          "replays"
+        ],
+        "summary": "Get Camera Summary Counts",
+        "description": "**Gets counts of config/camera/date combinations**. This is similar to \n  calling metadata and looking at the contents of the index.json. However,\n  this does not require zip files and is a faster operation for getting\n  a quick understanding of the underlying camera date folders.\n\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    version: an API version to use, if different than current",
+        "operationId": "get_camera_summary_counts_replays_counts_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplayCounts"
+              },
+              "examples": {
+                "single camera summary count": {
+                  "summary": "single camera summary count",
+                  "config_name": "sample_tracking",
+                  "date_folder": "2026-01-01",
+                  "camera_name": [
+                    "camera_1"
+                  ],
+                  "as_user": "demo"
+                },
+                "batch camera summary counts": {
+                  "summary": "batch camera summary counts",
+                  "config_name": "sample_tracking",
+                  "date_folder": "2026-01-01",
+                  "camera_name": [
+                    "camera_1",
+                    "camera_2"
+                  ],
+                  "as_user": "demo"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ]
+      }
+    },
     "/replays/dates": {
       "get": {
         "tags": [
@@ -5333,7 +5421,6 @@
         "title": "BatchEntry",
         "examples": [
           {
-            "as_user": "demo",
             "camera_name": "camera1_handgun_20240927_195958",
             "config_name": "sample_tracking",
             "date_folder": "2026-01-01",
@@ -5388,9 +5475,9 @@
         "title": "BatchList",
         "examples": [
           {
+            "as_user": "demo",
             "cameras": [
               {
-                "as_user": "demo",
                 "camera_name": "camera1_handgun_20240927_195958",
                 "config_name": "sample_tracking",
                 "date_folder": "2026-01-01",
@@ -5401,7 +5488,6 @@
                 "summary": "single camera index range example"
               },
               {
-                "as_user": "demo",
                 "camera_name": "camera4_handgun_2024927_200000",
                 "config_name": "sample_tracking",
                 "date_folder": "2026-01-01",
@@ -5419,7 +5505,7 @@
         "properties": {
           "file": {
             "type": "string",
-            "format": "binary",
+            "contentMediaType": "application/octet-stream",
             "title": "File",
             "description": "An image to upload and detect"
           }
@@ -5493,7 +5579,7 @@
         "properties": {
           "file": {
             "type": "string",
-            "format": "binary",
+            "contentMediaType": "application/octet-stream",
             "title": "File",
             "description": "A file to upload"
           }
@@ -5508,7 +5594,7 @@
         "properties": {
           "file": {
             "type": "string",
-            "format": "binary",
+            "contentMediaType": "application/octet-stream",
             "title": "File",
             "description": "A file to upload"
           }
@@ -5926,6 +6012,86 @@
             "as_user": "demo",
             "preferences_contents": "{\"original_image_width\": 1120,\"original_image_height\": 640,\"replay_camera_width\": 400,\"replay_camera_height\": 300,\"replay_scheduler_threads\": 10,\"similarity_model_size\": 224,\"track_manager_delete_features_on_init\": false}",
             "summary": "upload new detect config contents"
+          }
+        ]
+      },
+      "ReplayCounts": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "date_folder": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Folder"
+          },
+          "camera_name": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Camera Name",
+            "description": "The camera dir name in the replay dir (batch-capable).If only one camera, then single zip. If multiple cameras, then zip of multiple camera anomalies calls"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name",
+          "camera_name"
+        ],
+        "title": "ReplayCounts",
+        "examples": [
+          {
+            "as_user": "demo",
+            "camera_name": [
+              "camera_1"
+            ],
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "summary": "single camera summary count"
+          },
+          {
+            "as_user": "demo",
+            "camera_name": [
+              "camera_1",
+              "camera_2"
+            ],
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "summary": "batch camera summary counts"
           }
         ]
       },
