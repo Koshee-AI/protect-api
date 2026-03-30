@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "0.9.17"
+    "version": "0.9.18"
   },
   "paths": {
     "/token/": {
@@ -2415,7 +2415,7 @@
                     "config_name": "sample_tracking",
                     "date_folder": "2026-01-01",
                     "camera_name": [
-                      "camera_1"
+                      "handgun_warehouse_20240920_113909"
                     ],
                     "index_start": 0,
                     "max_frames": 10,
@@ -2430,8 +2430,8 @@
                     "config_name": "sample_tracking",
                     "date_folder": "2026-01-01",
                     "camera_name": [
-                      "camera_1",
-                      "camera_2"
+                      "handgun_warehouse_20240920_113909",
+                      "rifle_office_20240924_183659"
                     ],
                     "index_start": 0,
                     "max_frames": 10,
@@ -2446,8 +2446,8 @@
                     "config_name": "sample_tracking",
                     "date_folder": "2026-01-01",
                     "camera_name": [
-                      "camera_1",
-                      "camera_2"
+                      "handgun_warehouse_20240920_113909",
+                      "rifle_office_20240924_183659"
                     ],
                     "max_frames": 10,
                     "start_time": "2024-04-04 00:00:00",
@@ -2731,22 +2731,30 @@
               "examples": {
                 "single camera summary count": {
                   "summary": "single camera summary count",
-                  "config_name": "sample_tracking",
-                  "date_folder": "2026-01-01",
-                  "camera_name": [
-                    "camera_1"
-                  ],
-                  "as_user": "demo"
+                  "description": "single camera summary count",
+                  "value": {
+                    "summary": "single camera summary count",
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "handgun_warehouse_20240920_113909"
+                    ],
+                    "as_user": "demo"
+                  }
                 },
                 "batch camera summary counts": {
                   "summary": "batch camera summary counts",
-                  "config_name": "sample_tracking",
-                  "date_folder": "2026-01-01",
-                  "camera_name": [
-                    "camera_1",
-                    "camera_2"
-                  ],
-                  "as_user": "demo"
+                  "description": "batch camera summary counts",
+                  "value": {
+                    "summary": "batch camera summary counts",
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "handgun_warehouse_20240920_113909",
+                      "rifle_office_20240924_183659"
+                    ],
+                    "as_user": "demo"
+                  }
                 }
               }
             }
@@ -3054,7 +3062,7 @@
                     "config_name": "sample_tracking",
                     "date_folder": "2026-01-01",
                     "camera_name": [
-                      "camera_1"
+                      "handgun_warehouse_20240920_113909"
                     ],
                     "index_start": 0,
                     "max_frames": 10,
@@ -3069,8 +3077,8 @@
                     "config_name": "sample_tracking",
                     "date_folder": "2026-01-01",
                     "camera_name": [
-                      "camera_1",
-                      "camera_2"
+                      "handgun_warehouse_20240920_113909",
+                      "rifle_office_20240924_183659"
                     ],
                     "index_start": 0,
                     "max_frames": 10,
@@ -3085,8 +3093,8 @@
                     "config_name": "sample_tracking",
                     "date_folder": "2026-01-01",
                     "camera_name": [
-                      "camera_1",
-                      "camera_2"
+                      "handgun_warehouse_20240920_113909",
+                      "rifle_office_20240924_183659"
                     ],
                     "max_frames": 10,
                     "start_time": "2024-04-04 00:00:00",
@@ -3171,7 +3179,7 @@
                     "config_name": "sample_tracking",
                     "date_folder": "2026-01-01",
                     "camera_name": [
-                      "camera_1"
+                      "handgun_warehouse_20240920_113909"
                     ],
                     "as_user": "demo"
                   }
@@ -3183,8 +3191,8 @@
                     "config_name": "sample_tracking",
                     "date_folder": "2026-01-01",
                     "camera_name": [
-                      "camera_1",
-                      "camera_2"
+                      "handgun_warehouse_20240920_113909",
+                      "rifle_office_20240924_183659"
                     ],
                     "force_index_regen": true,
                     "as_user": "demo"
@@ -3266,7 +3274,7 @@
                     "config_name": "sample_tracking",
                     "date_folder": "2026-01-01",
                     "camera_name": [
-                      "camera_1"
+                      "handgun_warehouse_20240920_113909"
                     ],
                     "index_start": 0,
                     "max_notifications": 10,
@@ -3282,8 +3290,8 @@
                     "config_name": "sample_tracking",
                     "date_folder": "2026-01-01",
                     "camera_name": [
-                      "camera_1",
-                      "camera_2"
+                      "handgun_warehouse_20240920_113909",
+                      "rifle_office_20240924_183659"
                     ],
                     "index_start": 0,
                     "max_notifications": 10,
@@ -3299,8 +3307,8 @@
                     "config_name": "sample_tracking",
                     "date_folder": "2026-01-01",
                     "camera_name": [
-                      "camera_1",
-                      "camera_2"
+                      "handgun_warehouse_20240920_113909",
+                      "rifle_office_20240924_183659"
                     ],
                     "max_notifications": 10,
                     "start_time": "2024-04-04 00:00:00",
@@ -3386,7 +3394,7 @@
                     "config_name": "sample_tracking",
                     "date_folder": "2026-01-01",
                     "camera_name": [
-                      "camera_1"
+                      "handgun_warehouse_20240920_113909"
                     ],
                     "index_start": 0,
                     "max_frames": 10,
@@ -3401,8 +3409,8 @@
                     "config_name": "sample_tracking",
                     "date_folder": "2026-01-01",
                     "camera_name": [
-                      "camera_1",
-                      "camera_2"
+                      "handgun_warehouse_20240920_113909",
+                      "rifle_office_20240924_183659"
                     ],
                     "index_start": 0,
                     "max_frames": 10,
@@ -3417,8 +3425,8 @@
                     "config_name": "sample_tracking",
                     "date_folder": "2026-01-01",
                     "camera_name": [
-                      "camera_1",
-                      "camera_2"
+                      "handgun_warehouse_20240920_113909",
+                      "rifle_office_20240924_183659"
                     ],
                     "max_frames": 10,
                     "start_time": "2024-04-04 00:00:00",
