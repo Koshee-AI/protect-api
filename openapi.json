@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "0.9.18"
+    "version": "0.9.23"
   },
   "paths": {
     "/token/": {
@@ -942,6 +942,291 @@
             },
             "description": "The name of the log file"
           },
+          {
+            "name": "as_user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "the target local user (None means default local user)",
+              "title": "As User"
+            },
+            "description": "the target local user (None means default local user)"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/network/hostname": {
+      "get": {
+        "tags": [
+          "network"
+        ],
+        "summary": "Get Hostname",
+        "description": "**Gets the server hostname**",
+        "operationId": "get_hostname_network_hostname_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "as_user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "the target local user (None means default local user)",
+              "title": "As User"
+            },
+            "description": "the target local user (None means default local user)"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/network/ips": {
+      "get": {
+        "tags": [
+          "network"
+        ],
+        "summary": "Get Ip Addresses",
+        "description": "**Gets all ip addresses for this server**",
+        "operationId": "get_ip_addresses_network_ips_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "as_user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "the target local user (None means default local user)",
+              "title": "As User"
+            },
+            "description": "the target local user (None means default local user)"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/network/local_ip": {
+      "get": {
+        "tags": [
+          "network"
+        ],
+        "summary": "Get Local Ip",
+        "description": "**Gets the local network ip, if possible**",
+        "operationId": "get_local_ip_network_local_ip_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ],
+        "parameters": [
           {
             "name": "as_user",
             "in": "query",
@@ -2399,7 +2684,7 @@
           "replays"
         ],
         "summary": "Get Camera Anomalies",
-        "description": "**Gets anomalies from a start index to a max number of anomalies**\n\n  May return a zip of just the manifest if the results.json file has no\n  valid anomalies within the indexing range and available to user\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    index_start: the index (0..n) to start grabbing frames from\n    start_time: start time, if not using index (can be None for any start time)\n    end_time: end time, if not using index (can be None for any end time)\n    max_frames: the maximum frames to grab (up to 100)\n    include_originals: include original images when anomalies appear\n    version: an API version to use, if different than current",
+        "description": "**Gets anomalies from a start index to a max number of anomalies**\n\n  May return a zip of just the manifest if the results file has no\n  valid anomalies within the indexing range and available to user\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    index_start: the index (0..n) to start grabbing frames from\n    start_time: start time, if not using index (can be None for any start time)\n    end_time: end time, if not using index (can be None for any end time)\n    max_frames: the maximum frames to grab (up to 100)\n    include_originals: include original images when anomalies appear\n    version: an API version to use, if different than current",
         "operationId": "get_camera_anomalies_replays_anomalies_post",
         "requestBody": {
           "content": {
@@ -2544,7 +2829,7 @@
                         "summary": "single camera index range example",
                         "config_name": "sample_tracking",
                         "date_folder": "2026-01-01",
-                        "camera_name": "camera4_handgun_2024927_200000",
+                        "camera_name": "camera4_handgun_20240927_200000",
                         "event_type": "anomalies",
                         "index_start": 5,
                         "max_frames": 10,
@@ -3046,7 +3331,7 @@
           "replays"
         ],
         "summary": "Get Camera Keyframes",
-        "description": "**Gets keyframes from a start index to a max number of keyframes**\n\n  May return a zip of just the manifest if the results.json file has no\n  valid keyframes within the indexing range and available to user\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    index_start: the index (0..n) to start grabbing frames from\n    start_time: start time, if not using index (can be None for any start time)\n    end_time: end time, if not using index (can be None for any end time)\n    max_frames: the maximum frames to grab (up to 100)\n    include_originals: include original images when keyframes appear\n    version: an API version to use, if different than current",
+        "description": "**Gets keyframes from a start index to a max number of keyframes**\n\n  May return a zip of just the manifest if the results file has no\n  valid keyframes within the indexing range and available to user\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    index_start: the index (0..n) to start grabbing frames from\n    start_time: start time, if not using index (can be None for any start time)\n    end_time: end time, if not using index (can be None for any end time)\n    max_frames: the maximum frames to grab (up to 100)\n    include_originals: include original images when keyframes appear\n    version: an API version to use, if different than current",
         "operationId": "get_camera_keyframes_replays_keyframes_post",
         "requestBody": {
           "content": {
@@ -5496,7 +5781,7 @@
                 "summary": "single camera index range example"
               },
               {
-                "camera_name": "camera4_handgun_2024927_200000",
+                "camera_name": "camera4_handgun_20240927_200000",
                 "config_name": "sample_tracking",
                 "date_folder": "2026-01-01",
                 "event_type": "anomalies",
