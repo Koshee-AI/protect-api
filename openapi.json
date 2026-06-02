@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "0.9.23"
+    "version": "0.9.28"
   },
   "paths": {
     "/token/": {
@@ -30,6 +30,48 @@
             "application/x-www-form-urlencoded": {
               "schema": {
                 "$ref": "#/components/schemas/Body_login_for_access_token_token__post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/token/google": {
+      "post": {
+        "tags": [
+          "token"
+        ],
+        "summary": "Login With Google",
+        "description": "**Logs into the system via Google**\n\nValidates a Google ID token and returns an internal access token.\n\n- **request**: body containing the Google ID token from the client.",
+        "operationId": "login_with_google_token_google_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleTokenRequest"
               }
             }
           },
@@ -4646,9 +4688,7 @@
         "operationId": "list_local_users_on_server_users_local_users_get",
         "security": [
           {
-            "OAuth2PasswordBearer": [
-              "admin"
-            ]
+            "OAuth2PasswordBearer": []
           }
         ],
         "parameters": [
@@ -5540,8 +5580,17 @@
       "AddUser": {
         "properties": {
           "password": {
-            "type": "string",
-            "title": "Password"
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 4
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Password",
+            "description": "Password of user"
           },
           "full_name": {
             "anyOf": [
@@ -5648,7 +5697,9 @@
           },
           "date_folder": {
             "type": "string",
-            "title": "Date Folder"
+            "minLength": 10,
+            "title": "Date Folder",
+            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
           },
           "index_start": {
             "anyOf": [
@@ -5709,7 +5760,8 @@
         "type": "object",
         "required": [
           "config_name",
-          "camera_name"
+          "camera_name",
+          "date_folder"
         ],
         "title": "BatchEntry",
         "examples": [
@@ -5931,12 +5983,15 @@
           },
           "config_contents": {
             "type": "string",
-            "title": "Config Contents"
+            "minLength": 2,
+            "title": "Config Contents",
+            "description": "The new contents of the config file"
           }
         },
         "type": "object",
         "required": [
-          "config_name"
+          "config_name",
+          "config_contents"
         ],
         "title": "ConfigContents",
         "examples": [
@@ -6002,6 +6057,19 @@
         ],
         "title": "EventType"
       },
+      "GoogleTokenRequest": {
+        "properties": {
+          "id_token": {
+            "type": "string",
+            "title": "Id Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_token"
+        ],
+        "title": "GoogleTokenRequest"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -6025,13 +6093,15 @@
           "date_folder": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "minLength": 10
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Date Folder"
+            "title": "Date Folder",
+            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
           },
           "camera_name": {
             "items": {
@@ -6132,6 +6202,7 @@
         "type": "object",
         "required": [
           "config_name",
+          "date_folder",
           "camera_name"
         ],
         "title": "NotificationEvents",
@@ -6182,7 +6253,9 @@
           },
           "date_folder": {
             "type": "string",
-            "title": "Date Folder"
+            "minLength": 10,
+            "title": "Date Folder",
+            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
           },
           "frame_id": {
             "type": "integer",
@@ -6247,7 +6320,8 @@
         },
         "type": "object",
         "required": [
-          "config_name"
+          "config_name",
+          "date_folder"
         ],
         "title": "PictureCopy",
         "examples": [
@@ -6318,13 +6392,15 @@
           "date_folder": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "minLength": 10
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Date Folder"
+            "title": "Date Folder",
+            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
           },
           "camera_name": {
             "items": {
@@ -6363,6 +6439,7 @@
         "type": "object",
         "required": [
           "config_name",
+          "date_folder",
           "camera_name"
         ],
         "title": "ReplayCounts",
@@ -6398,13 +6475,15 @@
           "date_folder": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "minLength": 10
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Date Folder"
+            "title": "Date Folder",
+            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
           },
           "camera_name": {
             "items": {
@@ -6493,6 +6572,7 @@
         "type": "object",
         "required": [
           "config_name",
+          "date_folder",
           "camera_name"
         ],
         "title": "ReplayEvents",
@@ -6535,13 +6615,15 @@
           "date_folder": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "minLength": 10
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Date Folder"
+            "title": "Date Folder",
+            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
           },
           "camera_name": {
             "items": {
@@ -6586,6 +6668,7 @@
         "type": "object",
         "required": [
           "config_name",
+          "date_folder",
           "camera_name"
         ],
         "title": "ReplayMetadata",
@@ -6644,8 +6727,17 @@
       "UpdatePassword": {
         "properties": {
           "password": {
-            "type": "string",
-            "title": "Password"
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 4
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Password",
+            "description": "Password of user"
           },
           "version": {
             "anyOf": [
@@ -6679,13 +6771,15 @@
           "password": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "minLength": 4
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Password"
+            "title": "Password",
+            "description": "Password of user"
           },
           "full_name": {
             "anyOf": [
