@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "0.9.27"
+    "version": "0.9.28"
   },
   "paths": {
     "/token/": {
@@ -5580,8 +5580,15 @@
       "AddUser": {
         "properties": {
           "password": {
-            "type": "string",
-            "minLength": 4,
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 4
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Password",
             "description": "Password of user"
           },
@@ -5659,7 +5666,6 @@
         },
         "type": "object",
         "required": [
-          "password",
           "new_username"
         ],
         "title": "AddUser",
@@ -6721,8 +6727,15 @@
       "UpdatePassword": {
         "properties": {
           "password": {
-            "type": "string",
-            "minLength": 4,
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 4
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Password",
             "description": "Password of user"
           },
@@ -6740,9 +6753,6 @@
           }
         },
         "type": "object",
-        "required": [
-          "password"
-        ],
         "title": "UpdatePassword",
         "examples": [
           {
