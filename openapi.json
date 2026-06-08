@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "0.9.28"
+    "version": "1.0.0"
   },
   "paths": {
     "/token/": {
@@ -99,6 +99,540 @@
             }
           }
         }
+      }
+    },
+    "/camera_groups/add_sources": {
+      "post": {
+        "tags": [
+          "camera_groups"
+        ],
+        "summary": "Add Sources",
+        "description": "**Adds a list of sources to a camera group**",
+        "operationId": "add_sources_camera_groups_add_sources_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddGroupSources"
+              },
+              "examples": {
+                "add a list of two sources to group1 in the default group config": {
+                  "summary": "add a list of two sources to group1 in the default group config",
+                  "description": "add a list of two sources to group1 in the default group config",
+                  "value": {
+                    "config_name": "",
+                    "group_name": "group1",
+                    "sources": [
+                      "videos_dir1/my_video_1.mp4",
+                      "rtsp://192.168.0.1:554/main1"
+                    ]
+                  }
+                },
+                "add a list of two sources to group1 inside of a sample_groups config": {
+                  "summary": "add a list of two sources to group1 inside of a sample_groups config",
+                  "description": "add a list of two sources to group1 inside of a sample_groups config",
+                  "value": {
+                    "config_name": "sample_groups",
+                    "group_name": "group1",
+                    "sources": [
+                      "videos_dir1/my_video_1.mp4",
+                      "rtsp://192.168.0.1:554/main1"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/camera_groups/copy_groups": {
+      "post": {
+        "tags": [
+          "camera_groups"
+        ],
+        "summary": "Copy Groups",
+        "description": "**Adds a list of sources to a camera group**",
+        "operationId": "copy_groups_camera_groups_copy_groups_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CopyGroups"
+              },
+              "examples": {
+                "copy two groups from a config to the default groups": {
+                  "summary": "copy two groups from a config to the default groups",
+                  "description": "copy two groups from a config to the default groups",
+                  "value": {
+                    "summary": "copy two groups from a config to the default groups",
+                    "source_config": "config_1",
+                    "groups": [
+                      "group1",
+                      "group2"
+                    ],
+                    "target_config": ""
+                  }
+                },
+                "copy two groups from the default groups to a target config": {
+                  "summary": "copy two groups from the default groups to a target config",
+                  "description": "copy two groups from the default groups to a target config",
+                  "value": {
+                    "summary": "copy two groups from the default groups to a target config",
+                    "source_config": "",
+                    "groups": [
+                      "group1",
+                      "group2"
+                    ],
+                    "target_config": "config_1"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/camera_groups/delete_group": {
+      "post": {
+        "tags": [
+          "camera_groups"
+        ],
+        "summary": "Delete Groups",
+        "description": "**Deletes a group**",
+        "operationId": "delete_groups_camera_groups_delete_group_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteGroup"
+              },
+              "examples": {
+                "deletes group1 in the default group config": {
+                  "summary": "deletes group1 in the default group config",
+                  "description": "deletes group1 in the default group config",
+                  "value": {
+                    "config_name": "",
+                    "group_name": "group1"
+                  }
+                },
+                "deletes group1 in the sample_groups config": {
+                  "summary": "deletes group1 in the sample_groups config",
+                  "description": "deletes group1 in the sample_groups config",
+                  "value": {
+                    "config_name": "sample_groups",
+                    "group_name": "group1"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/camera_groups/delete_sources": {
+      "post": {
+        "tags": [
+          "camera_groups"
+        ],
+        "summary": "Delete Sources",
+        "description": "**Deletes a list of sources from a camera group**",
+        "operationId": "delete_sources_camera_groups_delete_sources_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteGroupSources"
+              },
+              "examples": {
+                "deletes two sources from group1 in the default group config": {
+                  "summary": "deletes two sources from group1 in the default group config",
+                  "description": "deletes two sources from group1 in the default group config",
+                  "value": {
+                    "config_name": "",
+                    "group_name": "group1",
+                    "sources": [
+                      "videos_dir1/my_video_1.mp4",
+                      "rtsp://192.168.0.1:554/main1"
+                    ]
+                  }
+                },
+                "deletes two sources from group1 in the sample_groups config": {
+                  "summary": "deletes two sources from group1 in the sample_groups config",
+                  "description": "deletes two sources from group1 in the sample_groups config",
+                  "value": {
+                    "config_name": "sample_groups",
+                    "group_name": "group1",
+                    "sources": [
+                      "videos_dir1/my_video_1.mp4",
+                      "rtsp://192.168.0.1:554/main1"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/camera_groups/groups": {
+      "post": {
+        "tags": [
+          "camera_groups"
+        ],
+        "summary": "Get Groups",
+        "description": "**Gets list of groups **",
+        "operationId": "get_groups_camera_groups_groups_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetGroupsList"
+              },
+              "examples": {
+                "retrieves groups in default groups": {
+                  "summary": "retrieves groups in default groups",
+                  "description": "retrieves groups in default groups",
+                  "value": {
+                    "config_name": ""
+                  }
+                },
+                "retrieves groups in config called sample_groups": {
+                  "summary": "retrieves groups in config called sample_groups",
+                  "description": "retrieves groups in config called sample_groups",
+                  "value": {
+                    "config_name": "sample_groups"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/camera_groups/sources": {
+      "post": {
+        "tags": [
+          "camera_groups"
+        ],
+        "summary": "Get Groups",
+        "description": "**Gets list of groups **",
+        "operationId": "get_groups_camera_groups_sources_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetGroupSourceList"
+              },
+              "examples": {
+                "retrieves group1 in default groups": {
+                  "summary": "retrieves group1 in default groups",
+                  "description": "retrieves group1 in default groups",
+                  "value": {
+                    "config_name": "",
+                    "group_name": "group1"
+                  }
+                },
+                "retrieves group1 in config called sample_groups": {
+                  "summary": "retrieves group1 in config called sample_groups",
+                  "description": "retrieves group1 in config called sample_groups",
+                  "value": {
+                    "config_name": "sample_groups",
+                    "group_name": "group1"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:read"
+            ]
+          }
+        ]
       }
     },
     "/configs/cameras": {
@@ -5537,6 +6071,80 @@
   },
   "components": {
     "schemas": {
+      "AddGroupSources": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "group_name": {
+            "type": "string",
+            "title": "Group Name",
+            "description": "The group name"
+          },
+          "sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Sources",
+            "description": "a list of sources to add to a group"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name",
+          "group_name",
+          "sources"
+        ],
+        "title": "AddGroupSources",
+        "examples": [
+          {
+            "config_name": "",
+            "group_name": "group1",
+            "sources": [
+              "videos_dir1/my_video_1.mp4",
+              "rtsp://192.168.0.1:554/main1"
+            ],
+            "summary": "add a list of two sources to group1 in the default group config"
+          },
+          {
+            "config_name": "sample_groups",
+            "group_name": "group1",
+            "sources": [
+              "videos_dir1/my_video_1.mp4",
+              "rtsp://192.168.0.1:554/main1"
+            ],
+            "summary": "add a list of two sources to group1 inside of a sample_groups config"
+          }
+        ]
+      },
       "AddLocalUser": {
         "properties": {
           "username": {
@@ -6003,6 +6611,210 @@
           }
         ]
       },
+      "CopyGroups": {
+        "properties": {
+          "source_config": {
+            "type": "string",
+            "title": "Source Config",
+            "description": "The source config"
+          },
+          "groups": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Groups",
+            "description": "A list of groups"
+          },
+          "target_config": {
+            "type": "string",
+            "title": "Target Config",
+            "description": "The target config"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_config",
+          "groups",
+          "target_config"
+        ],
+        "title": "CopyGroups",
+        "examples": [
+          {
+            "groups": [
+              "group1",
+              "group2"
+            ],
+            "source_config": "config_1",
+            "summary": "copy two groups from a config to the default groups",
+            "target_config": ""
+          },
+          {
+            "groups": [
+              "group1",
+              "group2"
+            ],
+            "source_config": "",
+            "summary": "copy two groups from the default groups to a target config",
+            "target_config": "config_1"
+          }
+        ]
+      },
+      "DeleteGroup": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "group_name": {
+            "type": "string",
+            "title": "Group Name",
+            "description": "The group name"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name",
+          "group_name"
+        ],
+        "title": "DeleteGroup",
+        "examples": [
+          {
+            "config_name": "",
+            "group_name": "group1",
+            "summary": "deletes group1 in default groups"
+          },
+          {
+            "config_name": "sample_groups",
+            "group_name": "group1",
+            "summary": "deletes group1 in config called sample_groups"
+          }
+        ]
+      },
+      "DeleteGroupSources": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "group_name": {
+            "type": "string",
+            "title": "Group Name",
+            "description": "The group name"
+          },
+          "sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Sources",
+            "description": "a list of sources to add to a group"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name",
+          "group_name",
+          "sources"
+        ],
+        "title": "DeleteGroupSources",
+        "examples": [
+          {
+            "config_name": "",
+            "group_name": "group1",
+            "sources": [
+              "videos_dir1/my_video_1.mp4",
+              "rtsp://192.168.0.1:554/main1"
+            ],
+            "summary": "deletes a list of two sources to group1 in the default group config"
+          },
+          {
+            "config_name": "sample_groups",
+            "group_name": "group1",
+            "sources": [
+              "videos_dir1/my_video_1.mp4",
+              "rtsp://192.168.0.1:554/main1"
+            ],
+            "summary": "deletes a list of two sources to group1 inside of a sample_groups config"
+          }
+        ]
+      },
       "DeleteUser": {
         "properties": {
           "username": {
@@ -6056,6 +6868,110 @@
           "anomalies"
         ],
         "title": "EventType"
+      },
+      "GetGroupSourceList": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "group_name": {
+            "type": "string",
+            "title": "Group Name",
+            "description": "The group name"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name",
+          "group_name"
+        ],
+        "title": "GetGroupSourceList",
+        "examples": [
+          {
+            "config_name": "",
+            "group_name": "group1",
+            "summary": "retrieves group1 in default groups"
+          },
+          {
+            "config_name": "sample_groups",
+            "group_name": "group1",
+            "summary": "retrieves group1 in config called sample_groups"
+          }
+        ]
+      },
+      "GetGroupsList": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name"
+        ],
+        "title": "GetGroupsList",
+        "examples": [
+          {
+            "config_name": "",
+            "summary": "retrieves groups in default groups"
+          },
+          {
+            "config_name": "sample_groups",
+            "summary": "retrieves groups in config called sample_groups"
+          }
+        ]
       },
       "GoogleTokenRequest": {
         "properties": {
