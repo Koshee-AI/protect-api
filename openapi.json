@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.0.3"
+    "version": "1.1.3"
   },
   "paths": {
     "/token/": {
@@ -3398,8 +3398,7 @@
                         "event_type": "keyframes",
                         "index_start": 0,
                         "max_frames": 10,
-                        "include_originals": false,
-                        "as_user": "demo"
+                        "include_originals": false
                       },
                       {
                         "summary": "single camera index range example",
@@ -3409,10 +3408,20 @@
                         "event_type": "anomalies",
                         "index_start": 5,
                         "max_frames": 10,
-                        "include_originals": true,
-                        "as_user": "demo"
+                        "include_originals": true
+                      },
+                      {
+                        "summary": "single camera index range warnings example",
+                        "config_name": "sample_tracking",
+                        "date_folder": "2026-01-01",
+                        "camera_name": "camera4_handgun_20240927_200000",
+                        "event_type": "warnings",
+                        "index_start": 5,
+                        "max_frames": 10,
+                        "include_originals": true
                       }
-                    ]
+                    ],
+                    "as_user": "demo"
                   }
                 }
               }
@@ -4472,6 +4481,123 @@
             }
           }
         }
+      }
+    },
+    "/replays/warnings": {
+      "post": {
+        "tags": [
+          "replays"
+        ],
+        "summary": "Get Camera Warnings",
+        "description": "**Gets warnings from a start index to a max number of warnings**\n\n  May return a zip of just the manifest if the results file has no\n  valid warnings within the indexing range and available to user\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    index_start: the index (0..n) to start grabbing frames from\n    start_time: start time, if not using index (can be None for any start time)\n    end_time: end time, if not using index (can be None for any end time)\n    max_frames: the maximum frames to grab (up to 100)\n    include_originals: include original images when warnings appear\n    version: an API version to use, if different than current",
+        "operationId": "get_camera_warnings_replays_warnings_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplayEvents"
+              },
+              "examples": {
+                "single camera with index range example": {
+                  "summary": "single camera index range example",
+                  "description": "single camera index range example",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "handgun_warehouse_20240920_113909"
+                    ],
+                    "index_start": 0,
+                    "max_frames": 10,
+                    "include_originals": false,
+                    "as_user": "demo"
+                  }
+                },
+                "batch cameras with index range example": {
+                  "summary": "batch camera index range example",
+                  "description": "batch camera index range example",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "handgun_warehouse_20240920_113909",
+                      "rifle_office_20240924_183659"
+                    ],
+                    "index_start": 0,
+                    "max_frames": 10,
+                    "include_originals": false,
+                    "as_user": "demo"
+                  }
+                },
+                "batch cameras with date range with originals": {
+                  "summary": "batch camera date range example with originals",
+                  "description": "batch camera date range example with originals",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": [
+                      "handgun_warehouse_20240920_113909",
+                      "rifle_office_20240924_183659"
+                    ],
+                    "max_frames": 10,
+                    "start_time": "2024-04-04 00:00:00",
+                    "end_time": "2024-04-05 00:00:00",
+                    "include_originals": true,
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ]
       }
     },
     "/tracks/": {
@@ -6449,6 +6575,16 @@
                 "index_start": 5,
                 "max_frames": 10,
                 "summary": "single camera index range example"
+              },
+              {
+                "camera_name": "camera4_handgun_20240927_200000",
+                "config_name": "sample_tracking",
+                "date_folder": "2026-01-01",
+                "event_type": "warnings",
+                "include_originals": true,
+                "index_start": 5,
+                "max_frames": 10,
+                "summary": "single camera index range warnings example"
               }
             ]
           }
@@ -6865,6 +7001,7 @@
         "enum": [
           "regularities",
           "keyframes",
+          "warnings",
           "anomalies"
         ],
         "title": "EventType"
