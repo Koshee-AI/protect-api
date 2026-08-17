@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.2.3"
+    "version": "1.2.4"
   },
   "paths": {
     "/token/": {
@@ -6531,31 +6531,66 @@
             "default": 10
           },
           "include_crops": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Crops",
             "description": "If true, include crop images of detections",
             "default": false
           },
           "include_originals": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Originals",
             "description": "If true, include large original images",
             "default": false
           },
           "include_metadata": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Metadata",
             "description": "If true, include camera processing metadata",
             "default": false
           },
           "include_results": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Results",
             "description": "If true, include simplified results data",
             "default": false
           },
           "include_index": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Index",
             "description": "If true, include camera indexing data",
             "default": false
@@ -7325,31 +7360,66 @@
             "description": "end time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any end time)"
           },
           "include_crops": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Crops",
             "description": "If true, include crop images of detections",
             "default": false
           },
           "include_originals": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Originals",
             "description": "If true, include large original images",
             "default": false
           },
           "include_metadata": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Metadata",
             "description": "If true, include camera processing metadata",
             "default": false
           },
           "include_results": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Results",
             "description": "If true, include simplified results data",
             "default": false
           },
           "include_index": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Index",
             "description": "If true, include camera indexing data",
             "default": false
@@ -7731,31 +7801,66 @@
             "description": "end time in YYYY-MM-DD HH:MM:SS format, if not using index (can be None for any end time)"
           },
           "include_crops": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Crops",
             "description": "If true, include crop images of detections",
             "default": false
           },
           "include_originals": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Originals",
             "description": "If true, include large original images",
             "default": false
           },
           "include_metadata": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Metadata",
             "description": "If true, include camera processing metadata",
             "default": false
           },
           "include_results": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Results",
             "description": "If true, include simplified results data",
             "default": false
           },
           "include_index": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Index",
             "description": "If true, include camera indexing data",
             "default": false
@@ -7865,19 +7970,40 @@
             "default": false
           },
           "include_metadata": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Metadata",
             "description": "If true, include camera processing metadata",
             "default": false
           },
           "include_results": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Results",
             "description": "If true, include simplified results data",
             "default": false
           },
           "include_index": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Include Index",
             "description": "If true, include camera indexing data",
             "default": false
