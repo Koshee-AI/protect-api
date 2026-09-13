@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.3.1"
+    "version": "1.3.2"
   },
   "paths": {
     "/token/": {
@@ -1269,6 +1269,289 @@
             }
           }
         }
+      }
+    },
+    "/events/": {
+      "post": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Get Events",
+        "description": "**Gets available events**",
+        "operationId": "get_events_events__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetEvents"
+              },
+              "examples": {
+                "get all events for config": {
+                  "summary": "get all events for config",
+                  "description": "get all events for config",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "as_user": "demo"
+                  }
+                },
+                "get all events for all configs": {
+                  "summary": "get all events for all configs",
+                  "description": "get all events for all configs",
+                  "value": {
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/events/delete": {
+      "post": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Delete Events",
+        "description": "**Delete events**",
+        "operationId": "delete_events_events_delete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteEvents"
+              },
+              "examples": {
+                "delete all events for config": {
+                  "summary": "delete all events for config",
+                  "description": "delete all events for config",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "as_user": "demo"
+                  }
+                },
+                "delete specific event for config": {
+                  "summary": "delete specific event for config",
+                  "description": "delete specific event for config",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "event_name": "example_event",
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/events/save": {
+      "post": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Save Event",
+        "description": "**Delete events**",
+        "operationId": "save_event_events_save_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveEvent"
+              },
+              "examples": {
+                "save all cameras to a time range event": {
+                  "summary": "save all cameras to a time range event",
+                  "description": "save all cameras to a time range event",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "event_name": "all_cameras_2024_event",
+                    "start_time": "2024-09-20 11:39:11",
+                    "end_time": "2024-09-30 16:57:03",
+                    "event_type": "regularities",
+                    "as_user": "demo"
+                  }
+                },
+                "save specific cameras to a time range event": {
+                  "summary": "save specific cameras to a time range event",
+                  "description": "save specific cameras to a time range event",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "camera_name": [
+                      "office_bats_bags_20240926_192930",
+                      "outside_theft_regularities_20240926_192658"
+                    ],
+                    "date_folder": "2026-01-01",
+                    "event_name": "suspect_cameras_2024_event",
+                    "start_time": "2024-09-20 11:39:11",
+                    "end_time": "2024-09-30 16:57:03",
+                    "event_type": "regularities",
+                    "as_user": "demo"
+                  }
+                },
+                "save cameras in group to a time range event": {
+                  "summary": "save cameras in group to a time range event",
+                  "description": "save cameras in group to a time range event",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "camera_group": "entrance_cameras",
+                    "date_folder": "2026-01-01",
+                    "event_name": "entrance_cameras_2024_event",
+                    "start_time": "2024-09-20 11:39:11",
+                    "end_time": "2024-09-30 16:57:03",
+                    "event_type": "regularities",
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ]
       }
     },
     "/logs/": {
@@ -3260,7 +3543,7 @@
           "replays"
         ],
         "summary": "Get Camera Anomalies",
-        "description": "**Gets anomalies from a start index to a max number of anomalies**\n\n  May return a zip of just the manifest if the results file has no\n  valid anomalies within the indexing range and available to user\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    index_start: the index (0..n) to start grabbing frames from\n    start_time: start time, if not using index (can be None for any start time)\n    end_time: end time, if not using index (can be None for any end time)\n    max_frames: the maximum frames to grab (up to 100)\n    include_originals: include original images when anomalies appear\n    version: an API version to use, if different than current",
+        "description": "**Gets anomalies from a start index to a max number of anomalies**\n\n  May return a zip of just the manifest if the results file has no\n  valid anomalies within the indexing range and available to user",
         "operationId": "get_camera_anomalies_replays_anomalies_post",
         "requestBody": {
           "content": {
@@ -3449,6 +3732,21 @@
                         "include_results": false,
                         "include_index": false,
                         "compress": false
+                      },
+                      {
+                        "summary": "single camera index range event example",
+                        "config_name": "sample_tracking",
+                        "event_name": "all_cameras_2024_event",
+                        "camera_name": "camera1_handgun_20240927_195958",
+                        "event_type": "keyframes",
+                        "index_start": 0,
+                        "max_frames": 10,
+                        "include_crops": true,
+                        "include_originals": false,
+                        "include_metadata": false,
+                        "include_results": false,
+                        "include_index": false,
+                        "compress": false
                       }
                     ],
                     "as_user": "demo",
@@ -3621,7 +3919,7 @@
           "replays"
         ],
         "summary": "Get Camera Summary Counts",
-        "description": "**Gets counts of config/camera/date combinations**. This is similar to \n  calling metadata and looking at the contents of the index.json. However,\n  this does not require zip files and is a faster operation for getting\n  a quick understanding of the underlying camera date folders.\n\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    version: an API version to use, if different than current",
+        "description": "**Gets counts of config/camera/date combinations**. This is similar to \n  calling metadata and looking at the contents of the index.json. However,\n  this does not require zip files and is a faster operation for getting\n  a quick understanding of the underlying camera date folders.",
         "operationId": "get_camera_summary_counts_replays_counts_post",
         "requestBody": {
           "content": {
@@ -3947,7 +4245,7 @@
           "replays"
         ],
         "summary": "Get Camera Keyframes",
-        "description": "**Gets keyframes from a start index to a max number of keyframes**\n\n  May return a zip of just the manifest if the results file has no\n  valid keyframes within the indexing range and available to user\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    index_start: the index (0..n) to start grabbing frames from\n    start_time: start time, if not using index (can be None for any start time)\n    end_time: end time, if not using index (can be None for any end time)\n    max_frames: the maximum frames to grab (up to 100)\n    include_originals: include original images when keyframes appear\n    version: an API version to use, if different than current",
+        "description": "**Gets keyframes from a start index to a max number of keyframes**\n\n  May return a zip of just the manifest if the results file has no\n  valid keyframes within the indexing range and available to user",
         "operationId": "get_camera_keyframes_replays_keyframes_post",
         "requestBody": {
           "content": {
@@ -4314,7 +4612,7 @@
           "replays"
         ],
         "summary": "Get Camera Regularity Frames",
-        "description": "**Gets regularities from a start frame index to a maximum of max frames and\n  returns a zip and manifest of any files within the range** Note that this\n  is modeled to be similar to keyframes and anomalies, but regularities can\n  include frames that are original frames only and do not have any crops.\n  This function only returns the index.json file and any associated frames\n  that have a regularity, keyframe, and anomaly crop. With the index, you\n  can get any frame ids necessary for the originals function frame id list. \n\n  May return a zip of just the manifest if the range has no valid frames\n  and available to user\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    frame_index_start: the index (0..n) to start grabbing frames from\n    start_time: start time, if not using index (can be None for any start time)\n    end_time: end time, if not using index (can be None for any end time)\n    max_frames: the maximum frames to grab (up to 100)\n    include_originals: include original images when regularities appear\n    version: an API version to use, if different than current",
+        "description": "**Gets regularities from a start frame index to a maximum of max frames and\n  returns a zip and manifest of any files within the range** Note that this\n  is modeled to be similar to keyframes and anomalies, but regularities can\n  include frames that are original frames only and do not have any crops.\n  This function only returns the index.json file and any associated frames\n  that have a regularity, keyframe, and anomaly crop. With the index, you\n  can get any frame ids necessary for the originals function frame id list. \n\n  May return a zip of just the manifest if the range has no valid frames\n  and available to user",
         "operationId": "get_camera_regularity_frames_replays_regularities_post",
         "requestBody": {
           "content": {
@@ -4486,6 +4784,24 @@
             "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
           },
           {
+            "name": "event_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "An event name, overrides anything entered in date_folder",
+              "title": "Event Name"
+            },
+            "description": "An event name, overrides anything entered in date_folder"
+          },
+          {
             "name": "as_user",
             "in": "query",
             "required": false,
@@ -4570,7 +4886,7 @@
           "replays"
         ],
         "summary": "Get Camera Warnings",
-        "description": "**Gets warnings from a start index to a max number of warnings**\n\n  May return a zip of just the manifest if the results file has no\n  valid warnings within the indexing range and available to user\n  Args:\n    config_name: the replay config\n    camera_name: the replay camera name\n    date_folder: the replay date\n    index_start: the index (0..n) to start grabbing frames from\n    start_time: start time, if not using index (can be None for any start time)\n    end_time: end time, if not using index (can be None for any end time)\n    max_frames: the maximum frames to grab (up to 100)\n    include_originals: include original images when warnings appear\n    version: an API version to use, if different than current",
+        "description": "**Gets warnings from a start index to a max number of warnings**\n\n  May return a zip of just the manifest if the results file has no\n  valid warnings within the indexing range and available to user",
         "operationId": "get_camera_warnings_replays_warnings_post",
         "requestBody": {
           "content": {
@@ -6526,10 +6842,28 @@
             "description": "The camera dir name in the replay dir"
           },
           "date_folder": {
-            "type": "string",
-            "minLength": 10,
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Date Folder",
             "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
+          },
+          "event_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Name",
+            "description": "The name of the event"
           },
           "index_start": {
             "anyOf": [
@@ -6654,7 +6988,7 @@
             "description": "an API version to use, if different than current"
           },
           "event_type": {
-            "$ref": "#/components/schemas/EventType",
+            "$ref": "#/components/schemas/EventTypeEnum",
             "description": "The minimum event type of interest",
             "default": "regularities"
           }
@@ -6662,8 +6996,7 @@
         "type": "object",
         "required": [
           "config_name",
-          "camera_name",
-          "date_folder"
+          "camera_name"
         ],
         "title": "BatchEntry",
         "examples": [
@@ -7023,6 +7356,67 @@
           }
         ]
       },
+      "DeleteEvents": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "event_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Name",
+            "description": "Event name, if targeted to an event"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name"
+        ],
+        "title": "DeleteEvents",
+        "examples": [
+          {
+            "as_user": "demo",
+            "config_name": "sample_tracking",
+            "event_name": "sample_event"
+          },
+          {
+            "as_user": "demo",
+            "config_name": "sample_tracking"
+          }
+        ]
+      },
       "DeleteGroup": {
         "properties": {
           "config_name": {
@@ -7198,7 +7592,7 @@
         ],
         "title": "ErrorResponse"
       },
-      "EventType": {
+      "EventTypeEnum": {
         "type": "string",
         "enum": [
           "regularities",
@@ -7206,7 +7600,58 @@
           "warnings",
           "anomalies"
         ],
-        "title": "EventType"
+        "title": "EventTypeEnum"
+      },
+      "GetEvents": {
+        "properties": {
+          "config_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Config Name",
+            "description": "Config name, if targeted to a config"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "title": "GetEvents",
+        "examples": [
+          {
+            "as_user": "demo",
+            "config_name": "sample_tracking"
+          },
+          {
+            "as_user": "demo"
+          }
+        ]
       },
       "GetGroupSourceList": {
         "properties": {
@@ -7348,8 +7793,7 @@
           "date_folder": {
             "anyOf": [
               {
-                "type": "string",
-                "minLength": 10
+                "type": "string"
               },
               {
                 "type": "null"
@@ -7357,6 +7801,18 @@
             ],
             "title": "Date Folder",
             "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
+          },
+          "event_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Name",
+            "description": "The name of the event"
           },
           "camera_name": {
             "items": {
@@ -7523,7 +7979,6 @@
         "type": "object",
         "required": [
           "config_name",
-          "date_folder",
           "camera_name"
         ],
         "title": "NotificationEvents",
@@ -7581,10 +8036,28 @@
             "default": "Camera"
           },
           "date_folder": {
-            "type": "string",
-            "minLength": 10,
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Date Folder",
             "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
+          },
+          "event_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Name",
+            "description": "The name of the event"
           },
           "frame_id": {
             "type": "integer",
@@ -7649,8 +8122,7 @@
         },
         "type": "object",
         "required": [
-          "config_name",
-          "date_folder"
+          "config_name"
         ],
         "title": "PictureCopy",
         "examples": [
@@ -7721,8 +8193,7 @@
           "date_folder": {
             "anyOf": [
               {
-                "type": "string",
-                "minLength": 10
+                "type": "string"
               },
               {
                 "type": "null"
@@ -7730,6 +8201,18 @@
             ],
             "title": "Date Folder",
             "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
+          },
+          "event_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Name",
+            "description": "The name of the event"
           },
           "camera_name": {
             "items": {
@@ -7768,7 +8251,6 @@
         "type": "object",
         "required": [
           "config_name",
-          "date_folder",
           "camera_name"
         ],
         "title": "ReplayCounts",
@@ -7804,8 +8286,7 @@
           "date_folder": {
             "anyOf": [
               {
-                "type": "string",
-                "minLength": 10
+                "type": "string"
               },
               {
                 "type": "null"
@@ -7813,6 +8294,18 @@
             ],
             "title": "Date Folder",
             "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
+          },
+          "event_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Name",
+            "description": "The name of the event"
           },
           "camera_name": {
             "items": {
@@ -7973,7 +8466,6 @@
         "type": "object",
         "required": [
           "config_name",
-          "date_folder",
           "camera_name"
         ],
         "title": "ReplayEvents",
@@ -8026,8 +8518,7 @@
           "date_folder": {
             "anyOf": [
               {
-                "type": "string",
-                "minLength": 10
+                "type": "string"
               },
               {
                 "type": "null"
@@ -8035,6 +8526,18 @@
             ],
             "title": "Date Folder",
             "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
+          },
+          "event_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Name",
+            "description": "The name of the event"
           },
           "camera_name": {
             "items": {
@@ -8131,7 +8634,6 @@
         "type": "object",
         "required": [
           "config_name",
-          "date_folder",
           "camera_name"
         ],
         "title": "ReplayMetadata",
@@ -8163,6 +8665,141 @@
             "include_metadata": true,
             "include_results": false,
             "summary": "batch camera pull after forcing index regen"
+          }
+        ]
+      },
+      "SaveEvent": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "date_folder": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Date Folder",
+            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
+          },
+          "event_name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Event Name",
+            "description": "Event name to refer to",
+            "default": "Event"
+          },
+          "start_time": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Start Time",
+            "description": "start time in YYYY-MM-DD HH:MM:SS format",
+            "default": "Start Time"
+          },
+          "end_time": {
+            "type": "string",
+            "minLength": 1,
+            "title": "End Time",
+            "description": "end time in YYYY-MM-DD HH:MM:SS format",
+            "default": "End Time"
+          },
+          "event_type": {
+            "$ref": "#/components/schemas/EventTypeEnum",
+            "description": "The minimum event type of interest",
+            "default": "regularities"
+          },
+          "camera_name": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Camera Name",
+            "description": "The camera dir name in the replay dir (batch-capable)."
+          },
+          "camera_group": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Camera Group",
+            "description": "Camera group, if targeted to a camera group"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name",
+          "date_folder"
+        ],
+        "title": "SaveEvent",
+        "examples": [
+          {
+            "as_user": "demo",
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "end_time": "2024-09-30 16:57:03",
+            "event_name": "all_cameras_2024_event",
+            "event_type": "regularities",
+            "start_time": "2024-09-20 11:39:11",
+            "summary": "save all cameras to a time range event"
+          },
+          {
+            "as_user": "demo",
+            "camera_name": [
+              "office_bats_bags_20240926_192930",
+              "outside_theft_regularities_20240926_192658"
+            ],
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "end_time": "2024-09-30 16:57:03",
+            "event_name": "suspect_cameras_2024_event",
+            "event_type": "regularities",
+            "start_time": "2024-09-20 11:39:11",
+            "summary": "save specific cameras to a time range event"
+          },
+          {
+            "as_user": "demo",
+            "camera_group": "entrance_cameras",
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "end_time": "2024-09-30 16:57:03",
+            "event_name": "entrance_cameras_2024_event",
+            "event_type": "regularities",
+            "start_time": "2024-09-20 11:39:11",
+            "summary": "save cameras in group to a time range event"
           }
         ]
       },
