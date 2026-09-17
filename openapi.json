@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.3.4"
+    "version": "1.3.5"
   },
   "paths": {
     "/token/": {
@@ -3805,12 +3805,12 @@
                         "compress": false
                       },
                       {
-                        "summary": "single camera index range example",
+                        "summary": "single camera index from end of list (recent)",
                         "config_name": "sample_tracking",
                         "date_folder": "2026-01-01",
                         "camera_name": "camera4_handgun_20240927_200000",
                         "event_type": "anomalies",
-                        "index_start": 5,
+                        "index_start": -10,
                         "max_frames": 10,
                         "include_crops": true,
                         "include_originals": true,
