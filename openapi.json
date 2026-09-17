@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.3.5"
+    "version": "1.3.6"
   },
   "paths": {
     "/token/": {
@@ -6477,6 +6477,46 @@
         }
       }
     },
+    "/version/": {
+      "get": {
+        "tags": [
+          "version"
+        ],
+        "summary": "Get Version",
+        "description": "**Gets version information**",
+        "operationId": "get_version_version__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/videos/": {
       "get": {
         "tags": [
@@ -9322,7 +9362,8 @@
               "users:read": "Read information about users.",
               "users:write": "Write (create or update) user information.",
               "videos:read": "Read user Video directory",
-              "videos:write": "Upload or delete user Video directory"
+              "videos:write": "Upload or delete user Video directory",
+              "version:read": "Read protect version info"
             },
             "tokenUrl": "token"
           }
