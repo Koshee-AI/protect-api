@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.3.10"
+    "version": "1.4.1"
   },
   "paths": {
     "/token/": {
@@ -23,7 +23,7 @@
           "token"
         ],
         "summary": "Login For Access Token",
-        "description": "**Logs into the system**\n\nCreates an access token if username and password are authenticated.\n\n- **form_data**: the user request form.",
+        "description": "**Logs into the system**\n\nCreates an access token and a refresh token if username and password\nare authenticated.\n\n- **form_data**: the user request form.",
         "operationId": "login_for_access_token_token__post",
         "requestBody": {
           "content": {
@@ -65,7 +65,7 @@
           "token"
         ],
         "summary": "Login With Google",
-        "description": "**Logs into the system via Google**\n\nValidates a Google ID token and returns an internal access token.\n\n- **request**: body containing the Google ID token from the client.",
+        "description": "**Logs into the system via Google**\n\nValidates a Google ID token and returns an internal access token and\nrefresh token.\n\n- **request**: body containing the Google ID token from the client.",
         "operationId": "login_with_google_token_google_post",
         "requestBody": {
           "content": {
@@ -84,6 +84,90 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/token/refresh": {
+      "post": {
+        "tags": [
+          "token"
+        ],
+        "summary": "Refresh Access Token",
+        "description": "**Refreshes an access token**\n\nExchanges a valid refresh token for a new access token and a new refresh\ntoken. The presented refresh token stops working (rotation) and the\nsession is extended by the refresh token lifetime (sliding window).\nDoes not require an access token, so it works after the access token\nhas expired.\n\n- **request**: body containing the refresh token.",
+        "operationId": "refresh_access_token_token_refresh_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/token/revoke": {
+      "post": {
+        "tags": [
+          "token"
+        ],
+        "summary": "Revoke Refresh Token",
+        "description": "**Logs out**\n\nRevokes the session that owns the refresh token. If **all_sessions** is\ntrue, revokes every session for that user (logout on all devices).\nAlways succeeds, even if the token is unknown or already revoked.\nAccess tokens already issued remain valid until they expire.\n\n- **request**: body containing the refresh token and all_sessions flag.",
+        "operationId": "revoke_refresh_token_token_revoke_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevokeTokenResponse"
                 }
               }
             }
@@ -1301,6 +1385,391 @@
             }
           }
         }
+      }
+    },
+    "/configs/history/redo": {
+      "post": {
+        "tags": [
+          "configs"
+        ],
+        "summary": "Redo Config",
+        "description": "**Saves contents to a config file (will overwrite existing config files)**",
+        "operationId": "redo_config_configs_history_redo_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfigSimpleChange"
+              },
+              "examples": {
+                "redo changes to a config file": {
+                  "summary": "redo changes to a config file",
+                  "description": "redo changes to a config file",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/configs/history/redo_exists": {
+      "post": {
+        "tags": [
+          "configs"
+        ],
+        "summary": "Redo Exists Config",
+        "description": "**Checks if a config file has a redo available**",
+        "operationId": "redo_exists_config_configs_history_redo_exists_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfigSimpleChange"
+              },
+              "examples": {
+                "redo changes to a config file": {
+                  "summary": "redo changes to a config file",
+                  "description": "redo changes to a config file",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/configs/history/undo": {
+      "post": {
+        "tags": [
+          "configs"
+        ],
+        "summary": "Undo Config",
+        "description": "**Saves contents to a config file (will overwrite existing config files)**",
+        "operationId": "undo_config_configs_history_undo_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfigSimpleChange"
+              },
+              "examples": {
+                "undo changes to a config file": {
+                  "summary": "undo changes to a config file",
+                  "description": "undo changes to a config file",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/configs/history/undo_exists": {
+      "post": {
+        "tags": [
+          "configs"
+        ],
+        "summary": "Undo Exists Config",
+        "description": "**Checks if a config file has an undo available**",
+        "operationId": "undo_exists_config_configs_history_undo_exists_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfigSimpleChange"
+              },
+              "examples": {
+                "undo changes to a config file": {
+                  "summary": "undo changes to a config file",
+                  "description": "undo changes to a config file",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/configs/history/version": {
+      "post": {
+        "tags": [
+          "configs"
+        ],
+        "summary": "History Version Config",
+        "description": "**Checks if a config file has an undo available**",
+        "operationId": "history_version_config_configs_history_version_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfigSimpleChange"
+              },
+              "examples": {
+                "get version of config file": {
+                  "summary": "get version of config file",
+                  "description": "get version of config file",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:read"
+            ]
+          }
+        ]
       }
     },
     "/detect/image": {
@@ -8038,6 +8507,49 @@
           }
         ]
       },
+      "ConfigSimpleChange": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name"
+        ],
+        "title": "ConfigSimpleChange",
+        "examples": [
+          {
+            "config_name": "sample_tracking"
+          }
+        ]
+      },
       "CopyGroups": {
         "properties": {
           "source_config": {
@@ -8939,6 +9451,19 @@
           }
         ]
       },
+      "RefreshTokenRequest": {
+        "properties": {
+          "refresh_token": {
+            "type": "string",
+            "title": "Refresh Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "refresh_token"
+        ],
+        "title": "RefreshTokenRequest"
+      },
       "RenameEvent": {
         "properties": {
           "config_name": {
@@ -9484,6 +10009,37 @@
           }
         ]
       },
+      "RevokeTokenRequest": {
+        "properties": {
+          "refresh_token": {
+            "type": "string",
+            "title": "Refresh Token"
+          },
+          "all_sessions": {
+            "type": "boolean",
+            "title": "All Sessions",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "refresh_token"
+        ],
+        "title": "RevokeTokenRequest"
+      },
+      "RevokeTokenResponse": {
+        "properties": {
+          "revoked": {
+            "type": "integer",
+            "title": "Revoked"
+          }
+        },
+        "type": "object",
+        "required": [
+          "revoked"
+        ],
+        "title": "RevokeTokenResponse"
+      },
       "SaveEvent": {
         "properties": {
           "config_name": {
@@ -9639,6 +10195,39 @@
           "token_type": {
             "type": "string",
             "title": "Token Type"
+          },
+          "expires_in": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires In"
+          },
+          "refresh_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refresh Token"
+          },
+          "refresh_expires_in": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refresh Expires In"
           }
         },
         "type": "object",
