@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.3"
+    "version": "1.4.8"
   },
   "paths": {
     "/token/": {
@@ -4095,6 +4095,112 @@
         }
       }
     },
+    "/processes/kill_process": {
+      "get": {
+        "tags": [
+          "processes"
+        ],
+        "summary": "Kill Process",
+        "description": "**Kills all detect and track processes that are running**",
+        "operationId": "kill_process_processes_kill_process_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "processes:kill"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pid",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "the pid of a protect process to kill",
+              "title": "Pid"
+            },
+            "description": "the pid of a protect process to kill"
+          },
+          {
+            "name": "as_user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "the target local user (None means default local user)",
+              "title": "As User"
+            },
+            "description": "the target local user (None means default local user)"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/processes/run_detect": {
       "get": {
         "tags": [
@@ -6292,6 +6398,202 @@
         }
       }
     },
+    "/tracks/add_replay_image_to_tracks": {
+      "post": {
+        "tags": [
+          "tracks"
+        ],
+        "summary": "Add Replay Image To Tracks",
+        "description": "**Adds a replay image to a track config**",
+        "operationId": "add_replay_image_to_tracks_tracks_add_replay_image_to_tracks_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddReplayImageToTrackConfig"
+              },
+              "examples": {
+                "add a replay image to a track config": {
+                  "summary": "adds a replay image to a track config",
+                  "description": "adds a replay image to a track config",
+                  "value": {
+                    "summary": "adds a replay image to a track config",
+                    "track_config": "test_tracking",
+                    "track_id": "suspect",
+                    "config_name": "sample_tracking",
+                    "camera_name": "office_bats_bags_20240926_192930",
+                    "date_folder": "2026-01-01",
+                    "frame_id": 160,
+                    "box_id": 0
+                  }
+                },
+                "add a replay image to a track config and override gps": {
+                  "summary": "add a replay image to a track config and override gps",
+                  "description": "add a replay image to a track config and override gps",
+                  "value": {
+                    "summary": "add a replay image to a track config and override gps",
+                    "track_config": "test_tracking",
+                    "track_id": "suspect",
+                    "config_name": "sample_tracking",
+                    "camera_name": "office_bats_bags_20240926_192930",
+                    "date_folder": "2026-01-01",
+                    "frame_id": 160,
+                    "box_id": 0,
+                    "gps_override": [
+                      36.101075220943216,
+                      -115.1730533973465
+                    ]
+                  }
+                },
+                "add a replay image to a track config and override time": {
+                  "summary": "add a replay image to a track config and override time",
+                  "description": "add a replay image to a track config and override time",
+                  "value": {
+                    "summary": "add a replay image to a track config and override time",
+                    "track_config": "test_tracking",
+                    "track_id": "suspect",
+                    "config_name": "sample_tracking",
+                    "camera_name": "office_bats_bags_20240926_192930",
+                    "date_folder": "2026-01-01",
+                    "frame_id": 160,
+                    "box_id": 0,
+                    "time_override": 1727492499.351108
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/tracks/new_config": {
+      "post": {
+        "tags": [
+          "tracks"
+        ],
+        "summary": "Create New Config",
+        "description": "**Creates a new track config**",
+        "operationId": "create_new_config_tracks_new_config_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewTrackConfig"
+              },
+              "examples": {
+                "saves a new config and overwrite existing": {
+                  "summary": "saves a new config and overwrite existing",
+                  "description": "saves a new config and overwrite existing",
+                  "value": {
+                    "summary": "saves a new config and overwrite existing",
+                    "config_name": "test_tracking",
+                    "target_config": "sample_tracking",
+                    "save_config": true,
+                    "as_user": "demo,"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:read"
+            ]
+          }
+        ]
+      }
+    },
     "/tracks/story": {
       "get": {
         "tags": [
@@ -6758,6 +7060,122 @@
             }
           }
         }
+      }
+    },
+    "/users/camera_group/add": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Add Camera Group",
+        "description": "**Adds a camera group to the user**",
+        "operationId": "add_camera_group_users_camera_group_add_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CameraGroupConfigUsername"
+              },
+              "examples": {
+                "adds a camera group": {
+                  "summary": "adds a camera group",
+                  "description": "adds a camera group",
+                  "value": {
+                    "username": "sample_user",
+                    "config_name": "sample_tracking",
+                    "camera_group": "a_user_group"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "admin"
+            ]
+          }
+        ]
+      }
+    },
+    "/users/camera_group/delete": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Add Camera Group",
+        "description": "**Deletes a camera group from the user**",
+        "operationId": "add_camera_group_users_camera_group_delete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CameraGroupConfigUsername"
+              },
+              "examples": {
+                "deletes a camera group": {
+                  "summary": "deletes a camera group",
+                  "description": "deletes a camera group",
+                  "value": {
+                    "username": "sample_user",
+                    "config_name": "sample_tracking",
+                    "camera_group": "a_user_group"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "admin"
+            ]
+          }
+        ]
       }
     },
     "/users/add": {
@@ -7948,6 +8366,152 @@
           }
         ]
       },
+      "AddReplayImageToTrackConfig": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "camera_name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Camera Name",
+            "description": "Camera name to refer to",
+            "default": "Camera"
+          },
+          "date_folder": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Folder",
+            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
+          },
+          "event_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Name",
+            "description": "The name of the event"
+          },
+          "frame_id": {
+            "type": "integer",
+            "title": "Frame Id",
+            "description": "The image frame identifier (0+)",
+            "default": 0
+          },
+          "box_id": {
+            "type": "integer",
+            "title": "Box Id",
+            "description": "The box within image identifier (0+)",
+            "default": 0
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          },
+          "track_config": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Track Config",
+            "description": "Track Config Name"
+          },
+          "track_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Track Id",
+            "description": "Track ID"
+          },
+          "address_override": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address Override",
+            "description": "An override of an address, if appropriate"
+          },
+          "gps_override": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gps Override",
+            "description": "An override of gps, if appropriate"
+          },
+          "time_override": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Time Override",
+            "description": "An override of camera time, if appropriate"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name",
+          "track_config",
+          "track_id"
+        ],
+        "title": "AddReplayImageToTrackConfig",
+        "examples": [
+          {
+            "box_id": 0,
+            "camera_name": "office_bats_bags_20240926_192930",
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "frame_id": 160,
+            "summary": "adds a replay image to a track config",
+            "track_config": "test_tracking",
+            "track_id": "suspect"
+          }
+        ]
+      },
       "AddUser": {
         "properties": {
           "password": {
@@ -8453,6 +9017,53 @@
           "file"
         ],
         "title": "Body_upload_video_videos_upload__post"
+      },
+      "CameraGroupConfigUsername": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "title": "Username",
+            "description": "The REST user id"
+          },
+          "camera_group": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Camera Group",
+            "description": "Camera group name to refer to",
+            "default": "Camera Group Name"
+          },
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "config_name"
+        ],
+        "title": "CameraGroupConfigUsername",
+        "examples": [
+          {
+            "camera_group": "camera_group",
+            "config": "sample_tracking",
+            "summary": "references a config camera group",
+            "username": "rest_user"
+          }
+        ]
       },
       "ConfigContents": {
         "properties": {
@@ -9050,6 +9661,73 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "NewTrackConfig": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "target_config": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Config",
+            "description": "The target config"
+          },
+          "save_config": {
+            "type": "boolean",
+            "title": "Save Config",
+            "description": "If true, saves the config",
+            "default": true
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name",
+          "target_config"
+        ],
+        "title": "NewTrackConfig",
+        "examples": [
+          {
+            "as_user": "demo,",
+            "config_name": "test_tracking",
+            "save_config": true,
+            "summary": "saves a new config and overwrite existing",
+            "target_config": "sample_tracking"
+          }
+        ]
       },
       "NotificationEvents": {
         "properties": {
@@ -10368,8 +11046,15 @@
         "title": "UpdateUser",
         "examples": [
           {
-            "password": "pass_1867",
-            "summary": "updates the logged in user password"
+            "password": "a_password_8567",
+            "summary": "update a user password",
+            "username": "user1"
+          },
+          {
+            "email": "user_1@myorg.org",
+            "full_name": "User 1",
+            "summary": "update a user full name and email",
+            "username": "user1"
           }
         ]
       },
