@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.12"
+    "version": "1.4.15"
   },
   "paths": {
     "/token/": {
@@ -5514,6 +5514,95 @@
         ]
       }
     },
+    "/replays/escalate_index": {
+      "post": {
+        "tags": [
+          "replays"
+        ],
+        "summary": "Escalate Index",
+        "description": "**Escalates indexes to closest frame id/index at another event type**",
+        "operationId": "escalate_index_replays_escalate_index_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplayEscalateIndexes"
+              },
+              "examples": {
+                "batch escalate indexes to closest frame at that event type": {
+                  "summary": "batch escalate indexes to closest frame at that event type",
+                  "description": "batch escalate indexes to closest frame at that event type",
+                  "value": {
+                    "summary": "batch escalate indexes to closest frame at that event type",
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "event_type": "keyframes",
+                    "new_event_type": "warnings",
+                    "camera_name": [
+                      "camera1_handgun_20240927_195958",
+                      "camera2_handgun_20240927_195959"
+                    ],
+                    "indexes": [
+                      50,
+                      60
+                    ],
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ]
+      }
+    },
     "/replays/keyframes": {
       "post": {
         "tags": [
@@ -7113,6 +7202,30 @@
               "default": "Time (Desc)"
             },
             "description": "Type of Sort to Apply to Story for Images"
+          },
+          {
+            "name": "story_index_start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "index in full story from all track managers for the track id",
+              "default": 0,
+              "title": "Story Index Start"
+            },
+            "description": "index in full story from all track managers for the track id"
+          },
+          {
+            "name": "max_story",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "maximum story entries to return (up to 100)",
+              "default": 300,
+              "title": "Max Story"
+            },
+            "description": "maximum story entries to return (up to 100)"
           },
           {
             "name": "include_crops",
@@ -11557,6 +11670,130 @@
               1000,
               200
             ],
+            "summary": "batch escalate a frame id to closest frame at that event type"
+          }
+        ]
+      },
+      "ReplayEscalateIndexes": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "date_folder": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Folder",
+            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
+          },
+          "event_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Name",
+            "description": "The name of the event"
+          },
+          "event_type": {
+            "$ref": "#/components/schemas/EventTypeEnum",
+            "description": "The minimum event type of interest",
+            "default": "regularities"
+          },
+          "new_event_type": {
+            "$ref": "#/components/schemas/EventTypeEnum",
+            "description": "The minimum event type of interest",
+            "default": "regularities"
+          },
+          "camera_name": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Camera Name",
+            "description": "The camera dir name in the replay dir (batch-capable).If only one camera, then single zip. If multiple cameras, then zip of multiple camera anomalies calls"
+          },
+          "indexes": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Indexes",
+            "description": "a list of indexes"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name",
+          "camera_name",
+          "indexes"
+        ],
+        "title": "ReplayEscalateIndexes",
+        "examples": [
+          {
+            "as_user": "demo",
+            "camera_name": [
+              "camera1_handgun_20240927_195958"
+            ],
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "event_type": "keyframes",
+            "indexes": [
+              50
+            ],
+            "new_event_type": "warnings",
+            "summary": "escalate a frame id to closest frame at that event type"
+          },
+          {
+            "as_user": "demo",
+            "camera_name": [
+              "camera1_handgun_20240927_195958",
+              "camera2_handgun_20240927_195959"
+            ],
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "event_type": "keyframes",
+            "indexes": [
+              50,
+              60
+            ],
+            "new_event_type": "warnings",
             "summary": "batch escalate a frame id to closest frame at that event type"
           }
         ]
