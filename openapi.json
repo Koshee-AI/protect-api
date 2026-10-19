@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.15"
+    "version": "1.4.16"
   },
   "paths": {
     "/token/": {
@@ -714,6 +714,1096 @@
           {
             "OAuth2PasswordBearer": [
               "configs:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/cases/": {
+      "post": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "Get Cases",
+        "description": "**Gets available cases**",
+        "operationId": "get_cases_cases__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetCases"
+              },
+              "examples": {
+                "get list of cases": {
+                  "summary": "get list of cases",
+                  "description": "get list of cases",
+                  "value": {
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "cases:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/cases/add_case": {
+      "post": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "Get Cases",
+        "description": "**Adds a case**",
+        "operationId": "get_cases_cases_add_case_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaseIdGeneric"
+              },
+              "examples": {
+                "add a case id": {
+                  "summary": "add a case id",
+                  "description": "add a case id",
+                  "value": {
+                    "case_id": "my_case",
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "cases:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/cases/add_contributors": {
+      "post": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "Add Contributors",
+        "description": "**Adds contributors to a case**",
+        "operationId": "add_contributors_cases_add_contributors_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCaseContributors"
+              },
+              "examples": {
+                "add case contributors": {
+                  "summary": "add case contributors",
+                  "description": "add case contributors",
+                  "value": {
+                    "summary": "add case contributors",
+                    "case_id": "my_case",
+                    "contributors": [
+                      "Frank McAfree",
+                      "Jonas Collins"
+                    ],
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "cases:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/cases/add_replay": {
+      "post": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "Add Replay",
+        "description": "**Adds a replay section to a case**",
+        "operationId": "add_replay_cases_add_replay_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddReplayToCase"
+              },
+              "examples": {
+                "adds a replay section to case by frame ids": {
+                  "summary": "adds a replay section to case by frame ids",
+                  "description": "adds a replay section to case by frame ids",
+                  "value": {
+                    "summary": "adds a replay section to case by frame ids",
+                    "case_id": "my_case",
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": "camera1_handgun_20240927_195958",
+                    "start": "300",
+                    "end": "500"
+                  }
+                },
+                "adds a replay section portion to case by human-readable time": {
+                  "summary": "adds a replay section to case by human-readable time",
+                  "description": "adds a replay section to case by human-readable time",
+                  "value": {
+                    "summary": "adds a replay to case by human-readable time",
+                    "case_id": "my_case",
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": "camera1_handgun_20240927_195958",
+                    "start": "5m 10s",
+                    "end": "6m 30s"
+                  }
+                },
+                "adds a replay section to case by standard video time": {
+                  "summary": "adds a replay section to case by standard video time",
+                  "description": "adds a replay section to case by standard video time",
+                  "value": {
+                    "summary": "adds a replay section to case by human-readable time",
+                    "case_id": "my_case",
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "camera_name": "camera1_handgun_20240927_195958",
+                    "start": "00:05:10",
+                    "end": "00:06:30"
+                  }
+                },
+                "adds a saved event section to case by standard video time": {
+                  "summary": "adds a saved event section to case by standard video time",
+                  "description": "adds a saved event section to case by standard video time",
+                  "value": {
+                    "summary": "adds a saved event section to case by human-readable time",
+                    "case_id": "my_case",
+                    "config_name": "sample_tracking",
+                    "event_name": "my_event",
+                    "camera_name": "camera1_handgun_20240927_195958",
+                    "start": "00:05:10",
+                    "end": "00:06:30"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "cases:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/cases/add_track_results": {
+      "post": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "Add Track Results",
+        "description": "**Adds track results to a case**",
+        "operationId": "add_track_results_cases_add_track_results_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddTrackResultsToCase"
+              },
+              "examples": {
+                "adds track resuls to case": {
+                  "summary": "adds track resuls to case",
+                  "description": "adds track resuls to case",
+                  "value": {
+                    "summary": "adds track resuls to case",
+                    "case_id": "my_case",
+                    "track_config": "sample_tracking_track",
+                    "track_id": "suspect",
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "cases:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/cases/config": {
+      "post": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "Get Config",
+        "description": "**Adds a case**",
+        "operationId": "get_config_cases_config_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaseIdGeneric"
+              },
+              "examples": {
+                "add a case id": {
+                  "summary": "add a case id",
+                  "description": "add a case id",
+                  "value": {
+                    "case_id": "my_case",
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "cases:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/cases/delete_case": {
+      "post": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "Delete Case",
+        "description": "**Deletes a case**",
+        "operationId": "delete_case_cases_delete_case_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaseIdGeneric"
+              },
+              "examples": {
+                "delete a case id": {
+                  "summary": "delete a case id",
+                  "description": "delete a case id",
+                  "value": {
+                    "case_id": "my_case",
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "cases:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/cases/download": {
+      "post": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "Download Case Outputs",
+        "description": "**Downloads outputs of a case**",
+        "operationId": "download_case_outputs_cases_download_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DownloadCaseOutputs"
+              },
+              "examples": {
+                "download case outputs without compression": {
+                  "summary": "download case outputs without compression",
+                  "description": "download case outputs without compression",
+                  "value": {
+                    "summary": "download case outputs without compression",
+                    "case_id": "my_case",
+                    "download_videos": true,
+                    "download_frames": false,
+                    "download_map": true,
+                    "download_slides": true,
+                    "compress": false,
+                    "as_user": "demo"
+                  }
+                },
+                "download case outputs with compression": {
+                  "summary": "download case outputs with compression",
+                  "description": "download case outputs with compression",
+                  "value": {
+                    "summary": "download case outputs with compression",
+                    "case_id": "my_case",
+                    "download_videos": true,
+                    "download_frames": false,
+                    "download_map": true,
+                    "download_slides": true,
+                    "compress": true,
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "cases:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/cases/gather": {
+      "post": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "Gather Case Outputs",
+        "description": "**Gathers outputs of a case**",
+        "operationId": "gather_case_outputs_cases_gather_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GatherCaseOutputs"
+              },
+              "examples": {
+                "gather case outputs": {
+                  "summary": "gather case outputs",
+                  "description": "gather case outputs",
+                  "value": {
+                    "summary": "gather case outputs",
+                    "case_id": "my_case",
+                    "generate_videos": true,
+                    "generate_frames": false,
+                    "fps": 10,
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "cases:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/cases/remove_contributors": {
+      "post": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "Remove Contributors",
+        "description": "**Removes contributors from a case**",
+        "operationId": "remove_contributors_cases_remove_contributors_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveCaseContributors"
+              },
+              "examples": {
+                "remove case contributors": {
+                  "summary": "remove case contributors",
+                  "description": "remove case contributors",
+                  "value": {
+                    "summary": "remove case contributors",
+                    "case_id": "my_case",
+                    "contributors": [
+                      "Frank McAfree"
+                    ],
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "cases:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/cases/remove_input": {
+      "post": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "Remove Case Input",
+        "description": "**Removes an input (Replay or Track Results) from a case**",
+        "operationId": "remove_case_input_cases_remove_input_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveCaseInput"
+              },
+              "examples": {
+                "remove a case input index (0+)": {
+                  "summary": "remove a case input index (0+)",
+                  "description": "remove a case input index (0+)",
+                  "value": {
+                    "summary": "remove a case input index (0+)",
+                    "case_id": "my_case",
+                    "index": 1,
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "cases:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/cases/reset_gather": {
+      "post": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "Reset Gather",
+        "description": "**Resets gathered files in a case**",
+        "operationId": "reset_gather_cases_reset_gather_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaseIdGeneric"
+              },
+              "examples": {
+                "resets the gathered evidence in a case": {
+                  "summary": "resets the gathered evidence in a case",
+                  "description": "resets the gathered evidence in a case",
+                  "value": {
+                    "summary": "resets the gathered evidence in a case",
+                    "case_id": "my_case",
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "cases:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/cases/update_metadata": {
+      "post": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "Update Metadata",
+        "description": "**Adds track results to a case**",
+        "operationId": "update_metadata_cases_update_metadata_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCaseMetadata"
+              },
+              "examples": {
+                "update case metadata": {
+                  "summary": "update the case metadata",
+                  "description": "pdate the case metadata",
+                  "value": {
+                    "case_id": "my_case",
+                    "case_name": "Case Name",
+                    "investigator": "John Smith",
+                    "contributors": [
+                      "John Smith",
+                      "Craig Jones",
+                      "Alice Thompkins"
+                    ],
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "cases:write"
             ]
           }
         ]
@@ -9171,6 +10261,65 @@
   },
   "components": {
     "schemas": {
+      "AddCaseContributors": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Case Id",
+            "description": "Case ID to refer to",
+            "default": "Case ID"
+          },
+          "contributors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Contributors",
+            "description": "A list of contributors"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "contributors"
+        ],
+        "title": "AddCaseContributors",
+        "examples": [
+          {
+            "as_user": "demo",
+            "case_id": "my_case",
+            "contributors": [
+              "Frank McAfree",
+              "Jonas Collins"
+            ],
+            "summary": "add case contributors"
+          }
+        ]
+      },
       "AddGroupSources": {
         "properties": {
           "config_name": {
@@ -9535,6 +10684,167 @@
             "summary": "adds a replay image to a track config",
             "track_config": "test_tracking",
             "track_id": "suspect"
+          }
+        ]
+      },
+      "AddReplayToCase": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Case Id",
+            "description": "Case ID to refer to",
+            "default": "Case ID"
+          },
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "date_folder": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Folder",
+            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
+          },
+          "event_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Name",
+            "description": "The name of the event"
+          },
+          "camera_name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Camera Name",
+            "description": "Camera name to refer to",
+            "default": "Camera"
+          },
+          "start": {
+            "type": "string",
+            "title": "Start",
+            "description": "the end time as a frame id or video time"
+          },
+          "end": {
+            "type": "string",
+            "title": "End",
+            "description": "the end time as a frame id or video time"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name",
+          "start",
+          "end"
+        ],
+        "title": "AddReplayToCase",
+        "examples": [
+          {
+            "camera_name": "camera1_handgun_20240927_195958",
+            "case_id": "my_case",
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "end": "1200",
+            "start": "1000",
+            "summary": "adds a replay by frame ids"
+          }
+        ]
+      },
+      "AddTrackResultsToCase": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Case Id",
+            "description": "Case ID to refer to",
+            "default": "Case ID"
+          },
+          "track_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Track Id",
+            "description": "Track ID to refer to",
+            "default": "Track ID"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          },
+          "track_config": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Track Config",
+            "description": "Track Config Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "track_config"
+        ],
+        "title": "AddTrackResultsToCase",
+        "examples": [
+          {
+            "as_user": "koshee",
+            "case_id": "my_case",
+            "summary": "adds a replay by frame ids",
+            "track_config": "sample_tracking_track",
+            "track_id": "track_id"
           }
         ]
       },
@@ -10090,6 +11400,51 @@
           }
         ]
       },
+      "CaseIdGeneric": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Case Id",
+            "description": "Case ID to refer to",
+            "default": "Case ID"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "title": "CaseIdGeneric",
+        "examples": [
+          {
+            "as_user": "demo",
+            "camera_group": "camera_group",
+            "case_id": "sample_tracking",
+            "summary": "generic reference to case id and user masquerade"
+          }
+        ]
+      },
       "ConfigContents": {
         "properties": {
           "config_name": {
@@ -10597,6 +11952,91 @@
           }
         ]
       },
+      "DownloadCaseOutputs": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Case Id",
+            "description": "Case ID to refer to",
+            "default": "Case ID"
+          },
+          "compress": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Compress",
+            "description": "If true, compress results in return",
+            "default": true
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          },
+          "download_videos": {
+            "type": "boolean",
+            "title": "Download Videos",
+            "description": "Download videos",
+            "default": true
+          },
+          "download_frames": {
+            "type": "boolean",
+            "title": "Download Frames",
+            "description": "Download frames",
+            "default": false
+          },
+          "download_map": {
+            "type": "boolean",
+            "title": "Download Map",
+            "description": "Download map",
+            "default": true
+          },
+          "download_slides": {
+            "type": "boolean",
+            "title": "Download Slides",
+            "description": "Download powerpoint slides",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "DownloadCaseOutputs",
+        "examples": [
+          {
+            "as_user": "koshee",
+            "case_id": "my_case",
+            "download_frames": false,
+            "download_map": true,
+            "download_slides": true,
+            "download_videos": true,
+            "summary": "gather case outputs"
+          }
+        ]
+      },
       "ErrorResponse": {
         "properties": {
           "message": {
@@ -10619,6 +12059,106 @@
           "anomalies"
         ],
         "title": "EventTypeEnum"
+      },
+      "GatherCaseOutputs": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Case Id",
+            "description": "Case ID to refer to",
+            "default": "Case ID"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          },
+          "generate_videos": {
+            "type": "boolean",
+            "title": "Generate Videos",
+            "description": "Generate videos",
+            "default": true
+          },
+          "generate_frames": {
+            "type": "boolean",
+            "title": "Generate Frames",
+            "description": "Generate frames",
+            "default": false
+          },
+          "fps": {
+            "type": "integer",
+            "title": "Fps",
+            "description": "Video fps",
+            "default": 10
+          }
+        },
+        "type": "object",
+        "title": "GatherCaseOutputs",
+        "examples": [
+          {
+            "as_user": "koshee",
+            "case_id": "my_case",
+            "fps": 10,
+            "generate_frames": false,
+            "generate_videos": true,
+            "summary": "gather case outputs"
+          }
+        ]
+      },
+      "GetCases": {
+        "properties": {
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "title": "GetCases",
+        "examples": [
+          {
+            "as_user": "demo"
+          }
+        ]
       },
       "GetEvents": {
         "properties": {
@@ -11403,6 +12943,117 @@
           "refresh_token"
         ],
         "title": "RefreshTokenRequest"
+      },
+      "RemoveCaseContributors": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Case Id",
+            "description": "Case ID to refer to",
+            "default": "Case ID"
+          },
+          "contributors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Contributors",
+            "description": "A list of contributors"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "contributors"
+        ],
+        "title": "RemoveCaseContributors",
+        "examples": [
+          {
+            "as_user": "demo",
+            "case_id": "my_case",
+            "contributors": [
+              "Frank McAfree"
+            ],
+            "summary": "remove case contributors"
+          }
+        ]
+      },
+      "RemoveCaseInput": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Case Id",
+            "description": "Case ID to refer to",
+            "default": "Case ID"
+          },
+          "index": {
+            "type": "integer",
+            "title": "Index",
+            "description": "The index to target"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "index"
+        ],
+        "title": "RemoveCaseInput",
+        "examples": [
+          {
+            "as_user": "demo",
+            "case_id": "my_case",
+            "index": 1,
+            "summary": "remove index (0+)"
+          }
+        ]
       },
       "RenameEvent": {
         "properties": {
@@ -12418,6 +14069,81 @@
         ],
         "title": "Token"
       },
+      "UpdateCaseMetadata": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Case Id",
+            "description": "Case ID to refer to",
+            "default": "Case ID"
+          },
+          "case_name": {
+            "type": "string",
+            "title": "Case Name",
+            "description": "Case name to refer to",
+            "default": "Case Name"
+          },
+          "investigator": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Investigator",
+            "description": "The lead investigator",
+            "default": "Lead investigator"
+          },
+          "contributors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Contributors",
+            "description": "A list of contributors"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "contributors"
+        ],
+        "title": "UpdateCaseMetadata",
+        "examples": [
+          {
+            "as_user": "demo",
+            "case_id": "my_case",
+            "case_name": "Case Name",
+            "contributors": [
+              "John Smith",
+              "Craig Jones",
+              "Alice Thompkins"
+            ],
+            "investigator": "John Smith",
+            "summary": "update the case metadata"
+          }
+        ]
+      },
       "UpdatePassword": {
         "properties": {
           "password": {
@@ -12617,6 +14343,8 @@
           "password": {
             "scopes": {
               "admin": "Full administrative access.",
+              "cases:read": "Read cases",
+              "cases:write": "Write cases",
               "configs:read": "Read camera and detector configs",
               "configs:write": "Write camera and detector configs",
               "detect": "Can call detect on media",
