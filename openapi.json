@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.19"
+    "version": "1.4.20"
   },
   "paths": {
     "/token/": {
@@ -1430,6 +1430,7 @@
                     "generate_videos": true,
                     "generate_frames": false,
                     "fps": 10,
+                    "reset_gather": true,
                     "as_user": "demo"
                   }
                 }
@@ -12069,6 +12070,12 @@
             "description": "Case ID to refer to",
             "default": "Case ID"
           },
+          "reset_gather": {
+            "type": "boolean",
+            "title": "Reset Gather",
+            "description": "If true, reset outputs in case before performing action",
+            "default": false
+          },
           "as_user": {
             "anyOf": [
               {
@@ -12121,6 +12128,7 @@
             "fps": 10,
             "generate_frames": false,
             "generate_videos": true,
+            "reset_gather": true,
             "summary": "gather case outputs"
           }
         ]
