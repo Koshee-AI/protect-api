@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.20"
+    "version": "1.4.21"
   },
   "paths": {
     "/token/": {
@@ -3019,6 +3019,117 @@
             }
           }
         }
+      }
+    },
+    "/detect/get_similar_images": {
+      "post": {
+        "tags": [
+          "detect"
+        ],
+        "summary": "Get Similar Images",
+        "description": "**Gets similar images from a source image_path**   \nThis function has a lot of settings and overrides. Here is a list of some of\nthe more confusing ones that might not be clear from examples.\n \ncategory: can be \"any person\", \"any vehicle\", \"any weapon\", \"any bag\"   \nconfig_name: the config to target similarity search into   \ndate_folder: the config replay folder to search into (exclusive with event_name)   \ndistance_filter: the max distance of a candidate in feet   \nevent_name: the config event folder to search into (exclusive with date_folder)   \nevent_type: can be \"regularities\", \"keyframes\", \"warnings\", or \"anomalies\"   \ngps: the gps (lat, lon) that should be center of the distance filter   \nimage_path: image path on server, can be local to image search paths   \nmax_images: the maximum number of images to return, sorted by similarity   \ntime_filter: a time distance which can be expressed in a human readable form such as \"12m\" for 12 minutes and \"1h 20m\" for 1 hour and 20 minutes",
+        "operationId": "get_similar_images_detect_get_similar_images_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetSimilarImages"
+              },
+              "examples": {
+                "gets similar from image in Pictures directory": {
+                  "summary": "gets similar from image in Pictures directory",
+                  "description": "gets similar from image in Pictures directory",
+                  "value": {
+                    "summary": "gets similar from image in Pictures directory",
+                    "image_path": "sample_tracking_track_suspect_track_0.jpg",
+                    "gps": [
+                      36.105166144463404,
+                      -115.17301132670805
+                    ],
+                    "camera_time": "2024-09-27 20:00:00",
+                    "distance_filter": "60",
+                    "time_filter": "5m",
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "category": "any person",
+                    "event_type": "keyframes",
+                    "compress": false,
+                    "max_images": 50
+                  }
+                },
+                "gets similar from image in replay directory": {
+                  "summary": "gets similar from image in replay directory",
+                  "description": "gets similar from image in replay directory",
+                  "value": {
+                    "summary": "gets similar from image in replay directory",
+                    "image_path": "assets/output/detect/sample_tracking/camera4_handgun_20240927_200000/2026-10-16/frame_11_box_0.jpg",
+                    "gps": [
+                      36.105166144463404,
+                      -115.17301132670805
+                    ],
+                    "camera_time": "2024-09-27 20:00:00",
+                    "distance_filter": "20",
+                    "time_filter": "2m",
+                    "config_name": "sample_tracking",
+                    "date_folder": "2026-01-01",
+                    "category": "any person",
+                    "event_type": "keyframes",
+                    "compress": false,
+                    "max_images": 150
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "cases:write"
+            ]
+          }
+        ]
       }
     },
     "/events/": {
@@ -11446,6 +11557,16 @@
           }
         ]
       },
+      "CategoryEnum": {
+        "type": "string",
+        "enum": [
+          "any person",
+          "any weapon",
+          "any vehicle",
+          "any bag"
+        ],
+        "title": "CategoryEnum"
+      },
       "ConfigContents": {
         "properties": {
           "config_name": {
@@ -12320,6 +12441,184 @@
           {
             "config_name": "sample_groups",
             "summary": "retrieves groups in config called sample_groups"
+          }
+        ]
+      },
+      "GetSimilarImages": {
+        "properties": {
+          "image_path": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Image Path",
+            "description": "Path to Image on Target Server (e.g., from Pictures dir)"
+          },
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "coords": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array",
+                "maxItems": 4,
+                "minItems": 4
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coords",
+            "description": "Coords, generally a box within an image"
+          },
+          "date_folder": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Folder",
+            "description": "The date dir name (usually in YYYY-MM-DD format) in the replay camera dir"
+          },
+          "event_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Name",
+            "description": "The name of the event"
+          },
+          "camera_time": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Camera Time",
+            "description": "The camera time (epoch or datestring)"
+          },
+          "gps": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array",
+                "maxItems": 2,
+                "minItems": 2
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gps",
+            "description": "Gps coordinate (lat, lon)"
+          },
+          "category": {
+            "$ref": "#/components/schemas/CategoryEnum",
+            "description": "The type of box of interest",
+            "default": "any person"
+          },
+          "event_type": {
+            "$ref": "#/components/schemas/EventTypeEnum",
+            "description": "The minimum event type of interest",
+            "default": "regularities"
+          },
+          "distance_filter": {
+            "type": "string",
+            "title": "Distance Filter",
+            "description": "Maximum distance for gps in feet"
+          },
+          "time_filter": {
+            "type": "string",
+            "title": "Time Filter",
+            "description": "Maximum distance in time (s by default)"
+          },
+          "compress": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Compress",
+            "description": "If true, compress results in return",
+            "default": true
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          },
+          "max_images": {
+            "type": "integer",
+            "exclusiveMaximum": 300.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Max Images",
+            "description": "the maximum similar images to grab",
+            "default": 50
+          }
+        },
+        "type": "object",
+        "required": [
+          "image_path",
+          "config_name",
+          "camera_time",
+          "distance_filter",
+          "time_filter"
+        ],
+        "title": "GetSimilarImages",
+        "examples": [
+          {
+            "camera_time": "2024-09-27 20:00:00",
+            "category": "any person",
+            "compress": false,
+            "config_name": "sample_tracking",
+            "date_folder": "2026-01-01",
+            "event_type": "keyframes",
+            "gps": [
+              36.105166144463404,
+              -115.17301132670805
+            ],
+            "gps_filter": "60",
+            "image_path": "sample_tracking_track_suspect_track_0.jpg",
+            "max_images": 100,
+            "summary": "retrieves group1 in default groups",
+            "time_filter": "5m"
           }
         ]
       },
