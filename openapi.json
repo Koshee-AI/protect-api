@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.21"
+    "version": "1.4.22"
   },
   "paths": {
     "/token/": {
@@ -3159,6 +3159,84 @@
                   "summary": "get all events for all configs",
                   "description": "get all events for all configs",
                   "value": {
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "replays:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/events/cameras": {
+      "post": {
+        "tags": [
+          "events"
+        ],
+        "summary": "List Event Cameras",
+        "description": "**Lists cameras in an event**",
+        "operationId": "list_event_cameras_events_cameras_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListEventCameras"
+              },
+              "examples": {
+                "lists event cameras": {
+                  "summary": "lists event cameras",
+                  "description": "lists event cameras",
+                  "value": {
+                    "config_name": "sample_tracking",
+                    "event_name": "test_event",
                     "as_user": "demo"
                   }
                 }
@@ -12647,6 +12725,58 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "ListEventCameras": {
+        "properties": {
+          "config_name": {
+            "type": "string",
+            "title": "Config Name",
+            "description": "The config dir name in replay dir"
+          },
+          "event_name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Event Name",
+            "description": "Event name to refer to",
+            "default": "Event"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config_name"
+        ],
+        "title": "ListEventCameras",
+        "examples": [
+          {
+            "as_user": "demo",
+            "config_name": "sample_tracking",
+            "event_name": "sample_event"
+          }
+        ]
       },
       "NewTrackConfig": {
         "properties": {
