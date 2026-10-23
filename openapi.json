@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.22"
+    "version": "1.4.23"
   },
   "paths": {
     "/token/": {
@@ -1349,6 +1349,95 @@
                     "download_map": true,
                     "download_slides": true,
                     "compress": true,
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "cases:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/cases/gap_analysis": {
+      "post": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "Get Config",
+        "description": "**Adds a case**",
+        "operationId": "get_config_cases_gap_analysis_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaseGapAnalysis"
+              },
+              "examples": {
+                "return the last gap analysis": {
+                  "summary": "return the last gap analysis",
+                  "description": "return the last gap analysis",
+                  "value": {
+                    "summary": "return the last gap analysis",
+                    "case_id": "my_case",
+                    "rerun": false,
+                    "as_user": "demo"
+                  }
+                },
+                "run a new gap analysis": {
+                  "summary": "run a new gap analysis",
+                  "description": "run a new gap analysis",
+                  "value": {
+                    "summary": "run a new gap analysis",
+                    "case_id": "my_case",
+                    "rerun": true,
                     "as_user": "demo"
                   }
                 }
@@ -11590,6 +11679,57 @@
           }
         ]
       },
+      "CaseGapAnalysis": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Case Id",
+            "description": "Case ID to refer to",
+            "default": "Case ID"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          },
+          "rerun": {
+            "type": "boolean",
+            "title": "Rerun",
+            "description": "Force a rerun of the analysis if exists",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "CaseGapAnalysis",
+        "examples": [
+          {
+            "as_user": "demo",
+            "case_id": "my_case",
+            "rerun": true,
+            "summary": "force a fresh run of a gap analysis"
+          }
+        ]
+      },
       "CaseIdGeneric": {
         "properties": {
           "case_id": {
@@ -11629,7 +11769,6 @@
         "examples": [
           {
             "as_user": "demo",
-            "camera_group": "camera_group",
             "case_id": "sample_tracking",
             "summary": "generic reference to case id and user masquerade"
           }
