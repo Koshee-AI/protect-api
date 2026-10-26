@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.25"
+    "version": "1.4.26"
   },
   "paths": {
     "/token/": {
@@ -7944,6 +7944,101 @@
         }
       }
     },
+    "/tracks/configs": {
+      "get": {
+        "tags": [
+          "tracks"
+        ],
+        "summary": "Get Track Results Available",
+        "description": "**Gets the track configs that are available to run**",
+        "operationId": "get_track_results_available_tracks_configs_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "tracks:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "as_user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "the target local user (None means default local user)",
+              "title": "As User"
+            },
+            "description": "the target local user (None means default local user)"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/tracks/add_image": {
       "post": {
         "tags": [
@@ -8045,7 +8140,7 @@
         "security": [
           {
             "OAuth2PasswordBearer": [
-              "configs:read"
+              "tracks:write"
             ]
           }
         ]
@@ -8161,7 +8256,7 @@
         "security": [
           {
             "OAuth2PasswordBearer": [
-              "configs:read"
+              "tracks:write"
             ]
           }
         ]
@@ -8277,7 +8372,7 @@
         "security": [
           {
             "OAuth2PasswordBearer": [
-              "configs:read"
+              "tracks:write"
             ]
           }
         ]
@@ -8356,7 +8451,7 @@
         "security": [
           {
             "OAuth2PasswordBearer": [
-              "configs:read"
+              "tracks:write"
             ]
           }
         ]
@@ -8436,7 +8531,7 @@
         "security": [
           {
             "OAuth2PasswordBearer": [
-              "configs:read"
+              "tracks:write"
             ]
           }
         ]
@@ -8516,7 +8611,7 @@
         "security": [
           {
             "OAuth2PasswordBearer": [
-              "configs:read"
+              "configs:write"
             ]
           }
         ]
@@ -14935,6 +15030,7 @@
               "replays:read": "Read replay output",
               "replays:write": "Write or delete replay output",
               "tracks:read": "Read track output",
+              "tracks:write": "Write to track sections of config files",
               "users:read": "Read information about users.",
               "users:write": "Write (create or update) user information.",
               "videos:read": "Read user Video directory",
