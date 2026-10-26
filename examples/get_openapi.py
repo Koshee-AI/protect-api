@@ -45,8 +45,8 @@ openapi_json = response.json()
 
 if response.status_code == 200:
   try:
-    if options.swagger is not None:
-      openapi_json["swagger"] = options.swagger
+    # if options.swagger is not None:
+    #   openapi_json["swagger"] = options.swagger
     with open(options.output, 'w') as json_file:
       json.dump(openapi_json, json_file, indent=2)
     print(f"Data successfully saved to {options.output}")

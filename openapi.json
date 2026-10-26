@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.24"
+    "version": "1.4.25"
   },
   "paths": {
     "/token/": {
@@ -14946,6 +14946,5 @@
         }
       }
     }
-  },
-  "swagger": "2.0"
+  }
 }
