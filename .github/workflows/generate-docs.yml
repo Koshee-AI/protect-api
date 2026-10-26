@@ -24,6 +24,7 @@ jobs:
         with:
           output: docs # Output directory for static files
           spec-file: openapi.json # Path to your OpenAPI spec file
+          version: '^5.0.0'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy to GitHub Pages
