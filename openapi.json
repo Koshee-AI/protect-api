@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.27"
+    "version": "1.4.28"
   },
   "paths": {
     "/token/": {
@@ -7949,9 +7949,9 @@
         "tags": [
           "tracks"
         ],
-        "summary": "Get Track Results Available",
+        "summary": "Get Track Configs",
         "description": "**Gets the track configs that are available to run**",
-        "operationId": "get_track_results_available_tracks_configs_get",
+        "operationId": "get_track_configs_tracks_configs_get",
         "security": [
           {
             "OAuth2PasswordBearer": [
@@ -8498,6 +8498,86 @@
                     "track_config": "sample_tracking_track",
                     "track_id": "suspect",
                     "image_path": "koshee/protect/sample_tracking_track_suspect_track_0.jpg",
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "tracks:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/tracks/delete_track_result": {
+      "post": {
+        "tags": [
+          "tracks"
+        ],
+        "summary": "Delete Track Result",
+        "description": "**Deletes a track image from track results**",
+        "operationId": "delete_track_result_tracks_delete_track_result_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteTrackImage"
+              },
+              "examples": {
+                "deletes an image from track results": {
+                  "summary": "deletes an image from track results",
+                  "description": "deletes an image from track results",
+                  "value": {
+                    "summary": "deletes an image from track results",
+                    "track_config": "sample_tracking_track",
+                    "track_id": "suspect",
+                    "image_path": "/home/demo/koshee/protect/assets/output/sample_tracking/camera1_handgun_20240927_195958/2026-01-01/frame_0_box_0.jpg",
                     "as_user": "demo"
                   }
                 }
