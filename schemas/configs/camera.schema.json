@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Koshee-AI/protect-api/refs/heads/main/schemas/configs/camera.schema.json",
+  "title": "Camera config",
+  "description": "Runs cameras (RTSP or other URIs ffmpeg can open, or video files) through detect, dg or ds configs. A config whose name has no detect_/dg_/ds_ prefix and no tracks section is a camera config. Without cameras it runs nothing. Fields not defined here are treated as comments by the server.",
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "name": { "$ref": "common.schema.json#/$defs/configName" },
+    "version": { "$ref": "common.schema.json#/$defs/version" },
+    "cameras": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/camera" }
+    },
+    "camera_groups": {
+      "type": "object",
+      "description": "Named groups of camera sources.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "sources": {
+            "type": "object",
+            "description": "Map of camera source -> enabled.",
+            "additionalProperties": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "notifications": {
+      "type": "object",
+      "properties": {
+        "monitor": { "type": "object" },
+        "send_policy": {
+          "type": "object",
+          "properties": {
+            "name": { "enum": ["nanomalies"] },
+            "policy": { "enum": ["same anomaly", "same category"] },
+            "threshold": { "type": "number", "minimum": 0 },
+            "time": { "type": "number", "minimum": 0, "description": "Seconds." }
+          }
+        },
+        "backoff": { "type": "number", "minimum": 0, "description": "Seconds." }
+      }
+    },
+    "location": { "$ref": "common.schema.json#/$defs/location" },
+    "processes": { "$ref": "common.schema.json#/$defs/processes" },
+    "management": {
+      "type": "object",
+      "properties": {
+        "originals": {
+          "type": "object",
+          "properties": {
+            "save_every_5s": { "type": "boolean" }
+          }
+        },
+        "utilization": {
+          "type": "object",
+          "properties": {
+            "threshold": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "keep_for": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Days to keep outputs."
+        }
+      }
+    }
+  },
+  "$defs": {
+    "camera": {
+      "type": "object",
+      "required": ["name", "source", "detectors"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unique camera name within this config."
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Anything ffmpeg can open: a video file path or a URI (rtsp://, https:// mjpeg, ...)."
+        },
+        "detectors": {
+          "$ref": "common.schema.json#/$defs/detectorList",
+          "minItems": 1
+        },
+        "fps": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Rate at which detectors are evaluated. May be fractional: 0.5 = one frame every 2 seconds."
+        },
+        "hardware_fps": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Advanced: overrides the server's idea of the camera's native fps. Rarely needed."
+        },
+        "start_time": {
+          "$ref": "common.schema.json#/$defs/localDateTime",
+          "description": "Wall-clock time of the first frame (YYYY-MM-DD HH:MM:SS), mostly for video files."
+        },
+        "end_time": {
+          "$ref": "common.schema.json#/$defs/localDateTime",
+          "description": "Wall-clock time of the last frame (YYYY-MM-DD HH:MM:SS)."
+        },
+        "location": { "$ref": "common.schema.json#/$defs/location" }
+      }
+    }
+  }
+}

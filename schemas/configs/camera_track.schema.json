@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Koshee-AI/protect-api/refs/heads/main/schemas/configs/camera_track.schema.json",
+  "title": "Camera config with built-in tracks",
+  "description": "A config with both cameras and tracks. The server runs both, but changing tracks then means restarting camera evaluation. Prefer a separate track config whose tracks.target_config points at the camera config.",
+  "allOf": [
+    { "$ref": "camera.schema.json" },
+    { "$ref": "track.schema.json" }
+  ]
+}

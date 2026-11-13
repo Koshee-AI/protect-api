@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Koshee-AI/protect-api/refs/heads/main/schemas/configs/detect.schema.json",
+  "title": "Detect config (detect_*)",
+  "description": "Specifies an AI model, confidence levels and the prompts to detect. Every section is required but may be empty ({} or []). Fields not defined here are treated as comments by the server.",
+  "type": "object",
+  "required": ["name", "classifier", "anomalies", "regularities", "conditionals", "warnings"],
+  "properties": {
+    "name": {
+      "$ref": "common.schema.json#/$defs/configName",
+      "pattern": "^detect_",
+      "x-errorMessage": "is not a valid detect config name: it must start with detect_"
+    },
+    "version": { "$ref": "common.schema.json#/$defs/version" },
+    "classifier": {
+      "type": "object",
+      "required": ["config"],
+      "properties": {
+        "config": {
+          "type": "object",
+          "required": ["model"],
+          "properties": {
+            "model": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Model file the server should load, e.g. person_weapons_32_mlnlca.trt."
+            },
+            "conf": {
+              "$ref": "#/$defs/probability",
+              "description": "Default confidence threshold. Applies to any prompt without its own threshold. Server default if omitted."
+            },
+            "iou": {
+              "$ref": "#/$defs/probability",
+              "description": "Intersection-over-union threshold for box suppression. Server default if omitted."
+            }
+          }
+        }
+      }
+    },
+    "anomalies": {
+      "$ref": "#/$defs/promptSet",
+      "description": "Prompts that should raise anomalies."
+    },
+    "warnings": {
+      "$ref": "#/$defs/promptSet",
+      "description": "Prompts that should raise warnings. Same structure as anomalies."
+    },
+    "regularities": {
+      "$ref": "#/$defs/promptSet",
+      "description": "Prompts for normal activity. The only section that supports keyframes.",
+      "properties": {
+        "keyframes": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true,
+          "description": "Prompts that mark keyframes. Every keyframe must also be listed in regularities.prompts."
+        }
+      }
+    },
+    "conditionals": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/conditional" }
+    },
+    "rename": {
+      "type": "object",
+      "description": "Map of prompt -> label to report it as, e.g. {\"a person\": \"after hours\"}.",
+      "additionalProperties": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "probability": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "promptSet": {
+      "type": "object",
+      "properties": {
+        "prompts": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true,
+          "description": "Natural-language prompts, e.g. \"a person holding a handgun\"."
+        },
+        "thresholds": {
+          "type": "object",
+          "description": "Per-prompt confidence thresholds. Prompts without one use classifier.config.conf.",
+          "additionalProperties": { "$ref": "#/$defs/probability" }
+        }
+      }
+    },
+    "conditional": {
+      "type": "object",
+      "required": ["conditional", "action"],
+      "properties": {
+        "conditional": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Condition expression, e.g. \"history_avg(a person, 5s) >= 3\". Parsed by the server, not by this schema."
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Action expression, e.g. \"create(anomaly:crowd:bound)\". Parsed by the server, not by this schema."
+        },
+        "region": {
+          "type": "array",
+          "description": "Normalized frame region [x1, y1, x2, y2], each 0-1. Omit for the whole frame.",
+          "items": { "type": "number", "minimum": 0, "maximum": 1 },
+          "minItems": 4,
+          "maxItems": 4
+        }
+      }
+    }
+  }
+}

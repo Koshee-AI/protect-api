@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Koshee-AI/protect-api/refs/heads/main/schemas/configs/common.schema.json",
+  "title": "Shared definitions",
+  "description": "Building blocks shared by every Koshee Protect config schema. Change a definition here and every config type that uses it picks up the change.",
+  "$defs": {
+    "configName": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Config name. Decides the config type by prefix (detect_, dg_, ds_, otherwise camera/track) and where the server saves outputs. It may differ from the filename."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Incremented by +1 on the server on every save. Re-read the config after saving to learn the new value."
+    },
+    "detectorEntry": {
+      "type": "object",
+      "description": "One detector reference. Either points at another config (detect_*, dg_*, ds_*) or is an operator (exclusive, union, consensus) that combines a nested detectors list.",
+      "required": ["detect"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Optional human-readable label. May be empty."
+        },
+        "detect": {
+          "type": "string",
+          "pattern": "^(exclusive|union|consensus|(detect_|dg_|ds_).+)$",
+          "x-errorMessage": "is not a valid detect value: use a config name starting with detect_, dg_ or ds_, or one of the operators exclusive, union, consensus",
+          "description": "Config to evaluate, or an operator. exclusive (the default when entries are listed without an operator) evaluates entries in order and uses the first that triggers; union evaluates all and merges results; consensus combines results by agreement."
+        },
+        "detectors": {
+          "$ref": "#/$defs/detectorList",
+          "description": "Nested entries combined by the operator in detect. Required when detect is an operator."
+        },
+        "criteria": {
+          "type": "object",
+          "description": "Operator options (for example consensus settings)."
+        },
+        "time_start": {
+          "$ref": "#/$defs/timeOfDay",
+          "description": "Start of the active window (HH:MM:SS). Windows may cross midnight, e.g. 20:00:00 to 06:00:00."
+        },
+        "time_end": {
+          "$ref": "#/$defs/timeOfDay",
+          "description": "End of the active window (HH:MM:SS)."
+        },
+        "days": {
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/dayOfWeek" },
+          "description": "Days of the week this entry is active."
+        }
+      },
+      "dependentRequired": {
+        "time_start": ["time_end"],
+        "time_end": ["time_start"]
+      },
+      "if": {
+        "properties": { "detect": { "enum": ["exclusive", "union", "consensus"] } },
+        "required": ["detect"]
+      },
+      "then": { "required": ["detectors"] }
+    },
+    "detectorList": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/detectorEntry" }
+    },
+    "timeOfDay": {
+      "type": "string",
+      "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$",
+      "x-errorMessage": "is not a valid time of day: use 24-hour HH:MM:SS, e.g. 20:00:00"
+    },
+    "dayOfWeek": {
+      "enum": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    },
+    "localDateTime": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$",
+      "x-errorMessage": "is not a valid date-time: use YYYY-MM-DD HH:MM:SS, e.g. 2024-09-27 19:59:58"
+    },
+    "calendarDate": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "x-errorMessage": "is not a valid date: use YYYY-MM-DD"
+    },
+    "latLon": {
+      "type": "array",
+      "description": "[latitude, longitude] in that order, as mapping software shows them. Note this is the reverse of GeoJSON's [lon, lat].",
+      "prefixItems": [
+        { "type": "number", "minimum": -90, "maximum": 90, "description": "Latitude" },
+        { "type": "number", "minimum": -180, "maximum": 180, "description": "Longitude" }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "location": {
+      "type": "object",
+      "properties": {
+        "properties": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "address": { "type": "string" }
+          }
+        },
+        "geometry": {
+          "type": "object",
+          "properties": {
+            "coordinates": { "$ref": "#/$defs/latLon" }
+          }
+        }
+      }
+    },
+    "processes": {
+      "type": "object",
+      "description": "Number of server worker processes of each kind.",
+      "properties": {
+        "system_manager": { "type": "boolean" },
+        "camera_processors": { "type": "integer", "minimum": 0 },
+        "results_consumers": { "type": "integer", "minimum": 0 },
+        "track_managers": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

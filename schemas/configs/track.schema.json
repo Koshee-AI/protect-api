@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Koshee-AI/protect-api/refs/heads/main/schemas/configs/track.schema.json",
+  "title": "Track config",
+  "description": "Tracks people or objects across the detections of a camera config. Any config with a tracks section is a track config. Preferred convention: keep tracks in their own config with tracks.target_config pointing at a camera config, so tracks can be started, stopped and edited without restarting camera evaluation. Fields not defined here are treated as comments by the server.",
+  "type": "object",
+  "required": ["name", "tracks"],
+  "properties": {
+    "name": { "$ref": "common.schema.json#/$defs/configName" },
+    "version": { "$ref": "common.schema.json#/$defs/version" },
+    "processes": { "$ref": "common.schema.json#/$defs/processes" },
+    "tracks": {
+      "type": "object",
+      "required": ["target_config"],
+      "properties": {
+        "target_config": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of the camera config whose detections are tracked."
+        },
+        "enabled": { "type": "boolean" },
+        "mode": {
+          "enum": ["fixed", "dynamic"],
+          "description": "fixed is the recommended mode."
+        },
+        "similarity": {
+          "type": "object",
+          "properties": {
+            "similarity_threshold": { "type": "number", "minimum": 0 },
+            "weighted_threshold": { "type": "number", "minimum": 0 }
+          }
+        },
+        "initialize": {
+          "type": "object",
+          "properties": {
+            "tracks": {
+              "type": "object",
+              "description": "Map of track id (e.g. suspect_1, person_2) -> track definition.",
+              "additionalProperties": { "$ref": "#/$defs/track" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "track": {
+      "type": "object",
+      "properties": {
+        "track_id": {
+          "type": "string",
+          "description": "Should match the key this track is stored under."
+        },
+        "track_name": { "type": "string", "description": "Display name, e.g. \"Suspect 1\"." },
+        "conditional": {
+          "enum": ["or", "and"],
+          "description": "How base images are combined. or is recommended."
+        },
+        "images": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/trackImage" }
+        }
+      }
+    },
+    "trackImage": {
+      "type": "object",
+      "description": "A base image for the track. Only image_path is required; the other fields are recommended because they give context for similarity scoring in the interfaces.",
+      "required": ["image_path"],
+      "properties": {
+        "image_path": { "type": "string", "minLength": 1 },
+        "box_id": { "type": "integer", "minimum": 0 },
+        "frame_id": { "type": "integer", "minimum": 0 },
+        "camera_name": { "type": "string" },
+        "camera_source": { "type": "string" },
+        "config_name": { "type": "string" },
+        "address": { "type": "string" },
+        "gps": { "$ref": "common.schema.json#/$defs/latLon" },
+        "camera_time": { "type": "number", "description": "Unix epoch seconds." },
+        "local_time": { "$ref": "common.schema.json#/$defs/localDateTime" },
+        "date_folder": { "$ref": "common.schema.json#/$defs/calendarDate" },
+        "caption": { "type": "string" },
+        "track_id": { "type": "string" },
+        "track_similarity": { "type": "number" },
+        "weighted_similarity": { "type": "number" },
+        "forgotten": { "type": "boolean" },
+        "manager_idx": {
+          "type": ["integer", "string"],
+          "pattern": "^[0-9]+$",
+          "description": "Parsed to an integer by the server."
+        },
+        "manager_story_idx": {
+          "type": ["integer", "string"],
+          "pattern": "^[0-9]+$",
+          "description": "Parsed to an integer by the server."
+        }
+      }
+    }
+  }
+}

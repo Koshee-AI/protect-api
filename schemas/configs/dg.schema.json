@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Koshee-AI/protect-api/refs/heads/main/schemas/configs/dg.schema.json",
+  "title": "Detector group config (dg_*)",
+  "description": "Groups detect, dg and ds configs that are evaluated together. Entries listed at the top level are evaluated as exclusive (the first entry that triggers wins). Use an entry with detect set to union or consensus and a nested detectors list to combine entries differently. Entries may be limited to time windows and days of the week. Fields not defined here are treated as comments by the server.",
+  "type": "object",
+  "required": ["name", "detectors"],
+  "properties": {
+    "name": {
+      "$ref": "common.schema.json#/$defs/configName",
+      "pattern": "^dg_",
+      "x-errorMessage": "is not a valid detector group name: it must start with dg_"
+    },
+    "version": { "$ref": "common.schema.json#/$defs/version" },
+    "detectors": {
+      "$ref": "common.schema.json#/$defs/detectorList",
+      "minItems": 1
+    }
+  }
+}
