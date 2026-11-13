@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.30"
+    "version": "1.4.31"
   },
   "paths": {
     "/token/": {
@@ -2950,6 +2950,207 @@
             ]
           }
         ]
+      }
+    },
+    "/configs/schema": {
+      "get": {
+        "tags": [
+          "configs"
+        ],
+        "summary": "Get Config Schema",
+        "description": "**Gets contents of a specific config schema**",
+        "operationId": "get_config_schema_configs_schema_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "schema_name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The name of the schema",
+              "title": "Schema Name"
+            },
+            "description": "The name of the schema"
+          },
+          {
+            "name": "as_user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "the target local user (None means default local user)",
+              "title": "As User"
+            },
+            "description": "the target local user (None means default local user)"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/configs/schemas": {
+      "get": {
+        "tags": [
+          "configs"
+        ],
+        "summary": "Get Config Schemas",
+        "description": "**Gets list of all schemas**",
+        "operationId": "get_config_schemas_configs_schemas_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "as_user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "the target local user (None means default local user)",
+              "title": "As User"
+            },
+            "description": "the target local user (None means default local user)"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/detect/image": {
