@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.32"
+    "version": "1.4.33"
   },
   "paths": {
     "/token/": {
@@ -2052,6 +2052,16 @@
                     "config_names": [
                       "sample_tracking"
                     ],
+                    "as_user": "demo"
+                  }
+                },
+                "reply to a comment": {
+                  "summary": "reply to a comment",
+                  "description": "reply to a comment",
+                  "value": {
+                    "author": "author@koshee.ai",
+                    "message": "This is a reply to another comment",
+                    "reply_to": "01a1e2a1-26cf-783e-ab1d-6556cd5eab2b",
                     "as_user": "demo"
                   }
                 }
