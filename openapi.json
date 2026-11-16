@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.31"
+    "version": "1.4.32"
   },
   "paths": {
     "/token/": {
@@ -800,9 +800,9 @@
         "tags": [
           "cases"
         ],
-        "summary": "Get Cases",
+        "summary": "Add Case",
         "description": "**Adds a case**",
-        "operationId": "get_cases_cases_add_case_post",
+        "operationId": "add_case_cases_add_case_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1894,6 +1894,641 @@
           {
             "OAuth2PasswordBearer": [
               "cases:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/comments/": {
+      "post": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "Get Comments",
+        "description": "**Gets available comments**",
+        "operationId": "get_comments_comments__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetComments"
+              },
+              "examples": {
+                "get list of active comments matching an author": {
+                  "summary": "get list of active comments matching an author",
+                  "description": "get list of active comments matching an author",
+                  "value": {
+                    "as_user": "demo",
+                    "unresolved_only": true,
+                    "author": "author@koshee.ai"
+                  }
+                },
+                "get list of active comments matching a tagged user": {
+                  "summary": "get list of active comments matching a tagged user",
+                  "description": "get list of active comments matching a tagged user",
+                  "value": {
+                    "as_user": "demo",
+                    "unresolved_only": true,
+                    "tagged_user": "tagged@koshee.ai"
+                  }
+                },
+                "get list of all comments, including deleted comments, matching a tagged user": {
+                  "summary": "get list of all comments, including deleted comments, matching a tagged user",
+                  "description": "get list of all comments, including deleted comments, matching a tagged user",
+                  "value": {
+                    "as_user": "demo",
+                    "include_deleted": true,
+                    "unresolved_only": false,
+                    "tagged_user": "tagged@koshee.ai"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "comments:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/comments/add": {
+      "post": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "Add Comment",
+        "description": "**Adds a comment**",
+        "operationId": "add_comment_comments_add_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddComment"
+              },
+              "examples": {
+                "add a comment to a case": {
+                  "summary": "add a comment to a case",
+                  "description": "add a comment to a case",
+                  "value": {
+                    "author": "author@koshee.ai",
+                    "message": "This is a test comment on my_case",
+                    "case_ids": [
+                      "my_case"
+                    ],
+                    "as_user": "demo"
+                  }
+                },
+                "add a comment to a case and tag users": {
+                  "summary": "add a comment to a case and tag users",
+                  "description": "add a comment to a case and tag users",
+                  "value": {
+                    "author": "author@koshee.ai",
+                    "tagged_users": [
+                      "tag1@koshee.ai",
+                      "tag2@koshee.ai"
+                    ],
+                    "message": "This is a test comment on my_case",
+                    "case_ids": [
+                      "my_case"
+                    ],
+                    "as_user": "demo"
+                  }
+                },
+                "add a comment to a config and tag users": {
+                  "summary": "add a comment to a config and tag users",
+                  "description": "add a comment to a config and tag users",
+                  "value": {
+                    "author": "author@koshee.ai",
+                    "tagged_users": [
+                      "tag1@koshee.ai",
+                      "tag2@koshee.ai"
+                    ],
+                    "message": "This is a test comment on sample_tracking",
+                    "config_names": [
+                      "sample_tracking"
+                    ],
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "comments:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/comments/delete": {
+      "post": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "Delete Comment",
+        "description": "**Deletes a comment**",
+        "operationId": "delete_comment_comments_delete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteComment"
+              },
+              "examples": {
+                "deletes a comment": {
+                  "summary": "deletes a comment",
+                  "description": "deletes a comment",
+                  "value": {
+                    "uuid": "01a1e2a1-26cf-783e-ab1d-6556cd5eab2b",
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "comments:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/comments/edit": {
+      "post": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "Edit Comment",
+        "description": "**Edits a comment**",
+        "operationId": "edit_comment_comments_edit_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditComment"
+              },
+              "examples": {
+                "edits a comment's message": {
+                  "summary": "edits a comment's message",
+                  "description": "edits a comment's message",
+                  "value": {
+                    "uuid": "01a1e2a1-26cf-783e-ab1d-6556cd5eab2b",
+                    "message": "A different message",
+                    "as_user": "demo"
+                  }
+                },
+                "edits a comment's tagged users": {
+                  "summary": "edits a comment's tagged users",
+                  "description": "edits a comment's tagged users",
+                  "value": {
+                    "uuid": "01a1e2a1-26cf-783e-ab1d-6556cd5eab2b",
+                    "tagged_users": [
+                      "tagged_user_1@koshee.ai",
+                      "tagged_user_2@koshee.ai"
+                    ],
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "comments:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/comments/resolve": {
+      "post": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "Resolve Comment",
+        "description": "**Resolves a comment**",
+        "operationId": "resolve_comment_comments_resolve_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveComment"
+              },
+              "examples": {
+                "resolve a comment if author or tagged user": {
+                  "summary": "resolve a comment if author or tagged user",
+                  "description": "resolve a comment if author or tagged user",
+                  "value": {
+                    "uuid": "01a1e2a1-26cf-783e-ab1d-6556cd5eab2b",
+                    "as_user": "demo"
+                  }
+                },
+                "forcefully resolve a comment": {
+                  "summary": "forcefully resolve a comment",
+                  "description": "forcefully resolve a comment",
+                  "value": {
+                    "uuid": "01a1e2a1-26cf-783e-ab1d-6556cd5eab2b",
+                    "force_resolve": true,
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "comments:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/comments/undelete": {
+      "post": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "Undelete Comment",
+        "description": "**Restores/undeletes a comment**",
+        "operationId": "undelete_comment_comments_undelete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UndeleteComment"
+              },
+              "examples": {
+                "undelete a comment if author or tagged user": {
+                  "summary": "undelete a comment if author or tagged user",
+                  "description": "undelete a comment if author or tagged user",
+                  "value": {
+                    "uuid": "01a1e2a1-26cf-783e-ab1d-6556cd5eab2b",
+                    "as_user": "demo"
+                  }
+                },
+                "forcefully undelete an author comment": {
+                  "summary": "forcefully undelete an author comment",
+                  "description": "forcefully undelete an author comment",
+                  "value": {
+                    "uuid": "01a1e2a1-26cf-783e-ab1d-6556cd5eab2b",
+                    "force_undelete": true,
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "comments:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/comments/unresolve": {
+      "post": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "Unresolve Comment",
+        "description": "**Unresolves a comment**",
+        "operationId": "unresolve_comment_comments_unresolve_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnresolveComment"
+              },
+              "examples": {
+                "unresolve a comment if author or tagged user": {
+                  "summary": "unresolve a comment if author or tagged user",
+                  "description": "unresolve a comment if author or tagged user",
+                  "value": {
+                    "uuid": "01a1e2a1-26cf-783e-ab1d-6556cd5eab2b",
+                    "as_user": "demo"
+                  }
+                },
+                "forcefully unresolve an author comment": {
+                  "summary": "forcefully resolve an author comment",
+                  "description": "forcefully resolve an author comment",
+                  "value": {
+                    "uuid": "01a1e2a1-26cf-783e-ab1d-6556cd5eab2b",
+                    "force_unresolve": true,
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "comments:write"
             ]
           }
         ]
@@ -10993,6 +11628,125 @@
           }
         ]
       },
+      "AddComment": {
+        "properties": {
+          "author": {
+            "type": "string",
+            "title": "Author",
+            "description": "the author"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Message",
+            "description": "a message to include"
+          },
+          "reply_to": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reply To",
+            "description": "the uuid of a comment that this would be in reply to"
+          },
+          "tagged_users": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tagged Users",
+            "description": "A list of tagged users"
+          },
+          "config_names": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Config Names",
+            "description": "A list of configs to link to"
+          },
+          "case_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Case Ids",
+            "description": "Case ids to refer to"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "author",
+          "message"
+        ],
+        "title": "AddComment",
+        "examples": [
+          {
+            "as_user": "demo",
+            "author": "author@koshee.ai",
+            "case_ids": [
+              "sample_tracking_case"
+            ],
+            "config_names": [
+              "sample_tracking"
+            ],
+            "message": "A simple comment",
+            "tagged_users": [
+              "tagged@koshee.ai",
+              "another_tagged@koshee.ai"
+            ]
+          }
+        ]
+      },
       "AddGroupSources": {
         "properties": {
           "config_name": {
@@ -12348,6 +13102,50 @@
           }
         ]
       },
+      "DeleteComment": {
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "title": "Uuid",
+            "description": "a uuid for a specific message"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "uuid"
+        ],
+        "title": "DeleteComment",
+        "examples": [
+          {
+            "as_user": "demo",
+            "uuid": "01a1e2a1-26cf-783e-ab1d-6556cd5eab2b"
+          }
+        ]
+      },
       "DeleteEvents": {
         "properties": {
           "config_name": {
@@ -12770,6 +13568,108 @@
           }
         ]
       },
+      "EditComment": {
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "title": "Uuid",
+            "description": "a uuid for a specific message"
+          },
+          "case_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Case Ids",
+            "description": "Case ids to refer to"
+          },
+          "config_names": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Config Names",
+            "description": "A list of configs to link to"
+          },
+          "tagged_users": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tagged Users",
+            "description": "A list of tagged users"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message",
+            "description": "a message"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "uuid"
+        ],
+        "title": "EditComment",
+        "examples": [
+          {
+            "as_user": "demo",
+            "message": "A different message",
+            "uuid": "01a1e2a1-26cf-783e-ab1d-6556cd5eab2b"
+          }
+        ]
+      },
       "ErrorResponse": {
         "properties": {
           "message": {
@@ -12897,6 +13797,145 @@
         "examples": [
           {
             "as_user": "demo"
+          }
+        ]
+      },
+      "GetComments": {
+        "properties": {
+          "author": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author",
+            "description": "an author"
+          },
+          "tagged_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tagged User",
+            "description": "A tagged user of interest"
+          },
+          "config_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Config Name",
+            "description": "Config name, if targeted to a config"
+          },
+          "case_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Case Id",
+            "description": "Case id to refer to"
+          },
+          "reply_to": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reply To",
+            "description": "the uuid of a comment that this would be in reply to"
+          },
+          "unresolved_only": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unresolved Only",
+            "description": "If true, only include unresolved comments",
+            "default": true
+          },
+          "include_deleted": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Include Deleted",
+            "description": "If true, include deleted comments",
+            "default": false
+          },
+          "audit": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audit",
+            "description": "If true, audit comments",
+            "default": false
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "title": "GetComments",
+        "examples": [
+          {
+            "as_user": "demo",
+            "audit": false,
+            "author": "author@koshee.ai",
+            "include_deleted": false,
+            "tagged_user": "tagged@koshee.ai",
+            "unresolved_only": true
           }
         ]
       },
@@ -13108,6 +14147,18 @@
             ],
             "title": "Event Name",
             "description": "The name of the event"
+          },
+          "camera_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Camera Name",
+            "description": "A camera name, if applicable. Generally used for gps lookup"
           },
           "camera_time": {
             "anyOf": [
@@ -14811,6 +15862,57 @@
           }
         ]
       },
+      "ResolveComment": {
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "title": "Uuid",
+            "description": "a uuid for a specific message"
+          },
+          "force_resolve": {
+            "type": "boolean",
+            "title": "Force Resolve",
+            "description": "If true, force the comment and all tagged users to be resolved",
+            "default": false
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "uuid"
+        ],
+        "title": "ResolveComment",
+        "examples": [
+          {
+            "as_user": "demo",
+            "force_resolve": true,
+            "uuid": "01a1e2a1-26cf-783e-ab1d-6556cd5eab2b"
+          }
+        ]
+      },
       "RevokeTokenRequest": {
         "properties": {
           "refresh_token": {
@@ -15038,6 +16140,108 @@
           "token_type"
         ],
         "title": "Token"
+      },
+      "UndeleteComment": {
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "title": "Uuid",
+            "description": "a uuid for a specific message"
+          },
+          "force_undelete": {
+            "type": "boolean",
+            "title": "Force Undelete",
+            "description": "If true, force the comment to be undeleted",
+            "default": false
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "uuid"
+        ],
+        "title": "UndeleteComment",
+        "examples": [
+          {
+            "as_user": "demo",
+            "force_undelete": true,
+            "uuid": "01a1e2a1-26cf-783e-ab1d-6556cd5eab2b"
+          }
+        ]
+      },
+      "UnresolveComment": {
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "title": "Uuid",
+            "description": "a uuid for a specific message"
+          },
+          "force_unresolve": {
+            "type": "boolean",
+            "title": "Force Unresolve",
+            "description": "If true, force the comment and all tagged users to be unresolved",
+            "default": false
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "uuid"
+        ],
+        "title": "UnresolveComment",
+        "examples": [
+          {
+            "as_user": "demo",
+            "force_unresolve": true,
+            "uuid": "01a1e2a1-26cf-783e-ab1d-6556cd5eab2b"
+          }
+        ]
       },
       "UpdateCaseMetadata": {
         "properties": {
@@ -15315,6 +16519,8 @@
               "admin": "Full administrative access.",
               "cases:read": "Read cases",
               "cases:write": "Write cases",
+              "comments:read": "Read comments",
+              "comments:write": "Write comments",
               "configs:read": "Read camera and detector configs",
               "configs:write": "Write camera and detector configs",
               "detect": "Can call detect on media",
