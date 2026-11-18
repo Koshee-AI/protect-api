@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.33"
+    "version": "1.4.34"
   },
   "paths": {
     "/token/": {
@@ -1940,6 +1940,28 @@
                     "include_deleted": true,
                     "unresolved_only": false,
                     "tagged_user": "tagged@koshee.ai"
+                  }
+                },
+                "get unresolved comments on a case": {
+                  "summary": "get unresolved comments on a case",
+                  "description": "get unresolved comments on a case",
+                  "value": {
+                    "as_user": "demo",
+                    "unresolved_only": true,
+                    "case_ids": [
+                      "my_case"
+                    ]
+                  }
+                },
+                "get unresolved comments on a config/replay": {
+                  "summary": "get unresolved comments on a config/replay",
+                  "description": "get unresolved comments on a config/replay",
+                  "value": {
+                    "as_user": "demo",
+                    "unresolved_only": true,
+                    "config_names": [
+                      "sample_tracking"
+                    ]
                   }
                 }
               }
