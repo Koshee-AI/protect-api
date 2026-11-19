@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.34"
+    "version": "1.4.35"
   },
   "paths": {
     "/token/": {
@@ -6140,6 +6140,103 @@
             }
           }
         }
+      }
+    },
+    "/preview/source": {
+      "post": {
+        "tags": [
+          "preview"
+        ],
+        "summary": "Preview Source",
+        "description": "**Previews a source RTSP or video file on the server**",
+        "operationId": "preview_source_preview_source_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreviewSource"
+              },
+              "examples": {
+                "preview a mp4 on server": {
+                  "summary": "preview a mp4 on server",
+                  "description": "preview a mp4 on server",
+                  "value": {
+                    "summary": "preview a mp4 on server",
+                    "source": "my_video_in_videos_dir.mp4",
+                    "as_user": "demo"
+                  }
+                },
+                "preview a rtsp feed from server": {
+                  "summary": "preview a rtsp feed from server",
+                  "description": "preview a rtsp feed from server",
+                  "value": {
+                    "summary": "preview a rtsp feed from server",
+                    "source": "rtsp://admin:SomePassword123@192.168.0.10:554/onvif/profile4/media.smp",
+                    "as_user": "demo"
+                  }
+                },
+                "preview a specific frame of a mp4 on server": {
+                  "summary": "preview a specific frame of a mp4 on server",
+                  "description": "preview a specific frame of a mp4 on server",
+                  "value": {
+                    "summary": "preview a specific frame of a mp4 on server",
+                    "source": "my_video_in_videos_dir.mp4",
+                    "frame_id": 250,
+                    "as_user": "demo"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "configs:read"
+            ]
+          }
+        ]
       }
     },
     "/processes/running": {
@@ -14981,6 +15078,65 @@
             "as_user": "demo",
             "preferences_contents": "{\"original_image_width\": 1120,\"original_image_height\": 640,\"replay_camera_width\": 400,\"replay_camera_height\": 300,\"replay_scheduler_threads\": 10,\"similarity_model_size\": 224,\"track_manager_delete_features_on_init\": false}",
             "summary": "upload new detect config contents"
+          }
+        ]
+      },
+      "PreviewSource": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Source",
+            "description": "RTSP url or video accessible on the server"
+          },
+          "frame_id": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Frame Id",
+            "description": "The frame number from the source"
+          },
+          "as_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As User",
+            "description": "the target local user (None means default local user)"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "an API version to use, if different than current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source"
+        ],
+        "title": "PreviewSource",
+        "examples": [
+          {
+            "as_user": "demo",
+            "frame_id": 5,
+            "source": "sample_tracking"
           }
         ]
       },
