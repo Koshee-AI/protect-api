@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.35"
+    "version": "1.4.36"
   },
   "paths": {
     "/token/": {
@@ -5173,7 +5173,7 @@
         "security": [
           {
             "OAuth2PasswordBearer": [
-              "replays:read"
+              "server_info:read"
             ]
           }
         ],
@@ -5268,7 +5268,7 @@
         "security": [
           {
             "OAuth2PasswordBearer": [
-              "replays:read"
+              "server_info:read"
             ]
           }
         ],
@@ -5363,7 +5363,7 @@
         "security": [
           {
             "OAuth2PasswordBearer": [
-              "replays:read"
+              "server_info:read"
             ]
           }
         ],
@@ -8812,6 +8812,368 @@
             ]
           }
         ]
+      }
+    },
+    "/server/hostname": {
+      "get": {
+        "tags": [
+          "server"
+        ],
+        "summary": "Get Hostname",
+        "description": "**Gets the server hostname**",
+        "operationId": "get_hostname_server_hostname_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "server_info:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "as_user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "the target local user (None means default local user)",
+              "title": "As User"
+            },
+            "description": "the target local user (None means default local user)"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/server/ips": {
+      "get": {
+        "tags": [
+          "server"
+        ],
+        "summary": "Get Ip Addresses",
+        "description": "**Gets all ip addresses for this server**",
+        "operationId": "get_ip_addresses_server_ips_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "server_info:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "as_user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "the target local user (None means default local user)",
+              "title": "As User"
+            },
+            "description": "the target local user (None means default local user)"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/server/local_ip": {
+      "get": {
+        "tags": [
+          "server"
+        ],
+        "summary": "Get Local Ip",
+        "description": "**Gets the local network ip, if possible**",
+        "operationId": "get_local_ip_server_local_ip_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "server_info:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "as_user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "the target local user (None means default local user)",
+              "title": "As User"
+            },
+            "description": "the target local user (None means default local user)"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/server/vram": {
+      "get": {
+        "tags": [
+          "server"
+        ],
+        "summary": "Get Vram",
+        "description": "**Gets the server hostname**",
+        "operationId": "get_vram_server_vram_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": [
+              "server_info:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "an API version to use, if different than current",
+              "title": "Version"
+            },
+            "description": "an API version to use, if different than current"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden local user as target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/tracks/": {
@@ -16722,6 +17084,7 @@
               "processes:run": "Run processes like detect and tracks",
               "replays:read": "Read replay output",
               "replays:write": "Write or delete replay output",
+              "server_info:read": "Read server metadata info and statuses",
               "tracks:read": "Read track output",
               "tracks:write": "Write to track sections of config files",
               "users:read": "Read information about users.",
