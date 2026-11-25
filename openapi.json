@@ -14,7 +14,7 @@
       "name": "BSD 3-Clause License",
       "identifier": "BSD-3-Clause"
     },
-    "version": "1.4.36"
+    "version": "1.4.37"
   },
   "paths": {
     "/token/": {
@@ -284,7 +284,7 @@
           "camera_groups"
         ],
         "summary": "Copy Groups",
-        "description": "**Adds a list of sources to a camera group**",
+        "description": "**Copy group members to another group**",
         "operationId": "copy_groups_camera_groups_copy_groups_post",
         "requestBody": {
           "content": {
@@ -639,9 +639,9 @@
         "tags": [
           "camera_groups"
         ],
-        "summary": "Get Groups",
-        "description": "**Gets list of groups **",
-        "operationId": "get_groups_camera_groups_sources_post",
+        "summary": "Get Sources",
+        "description": "**Gets list of sources **",
+        "operationId": "get_sources_camera_groups_sources_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1161,7 +1161,7 @@
           "cases"
         ],
         "summary": "Get Config",
-        "description": "**Adds a case**",
+        "description": "**Returns the case config including inputs, outputs, etc.**",
         "operationId": "get_config_cases_config_post",
         "requestBody": {
           "content": {
@@ -1411,9 +1411,9 @@
         "tags": [
           "cases"
         ],
-        "summary": "Get Config",
-        "description": "**Adds a case**",
-        "operationId": "get_config_cases_gap_analysis_post",
+        "summary": "Run Gap Analysis",
+        "description": "**Runs a gap analysis for all inputs and generates outputs**. Unlike\ngather, this option does not have to generate output data products\nlike videos or frames to generate the output timing entries in the\ncase file. This option is the fastest way to get preview information\nfor cases.",
+        "operationId": "run_gap_analysis_cases_gap_analysis_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1821,7 +1821,7 @@
           "cases"
         ],
         "summary": "Update Metadata",
-        "description": "**Adds track results to a case**",
+        "description": "**Updates the case metadata**",
         "operationId": "update_metadata_cases_update_metadata_post",
         "requestBody": {
           "content": {
@@ -4754,9 +4754,9 @@
         "tags": [
           "logs"
         ],
-        "summary": "Get Log Contents",
+        "summary": "Delete Log",
         "description": "**Deletes a log file**",
-        "operationId": "get_log_contents_logs__log_name__delete_get",
+        "operationId": "delete_log_logs__log_name__delete_get",
         "security": [
           {
             "OAuth2PasswordBearer": [
@@ -5061,9 +5061,9 @@
         "tags": [
           "models"
         ],
-        "summary": "Get Model Captions",
-        "description": "**Gets the configs for cameras**",
-        "operationId": "get_model_captions_models_generate_detector_get",
+        "summary": "Generate Detector",
+        "description": "**Generate a default detector config**",
+        "operationId": "generate_detector_models_generate_detector_get",
         "security": [
           {
             "OAuth2PasswordBearer": [
@@ -10597,9 +10597,9 @@
         "tags": [
           "users"
         ],
-        "summary": "Add Camera Group",
+        "summary": "Delete Camera Group",
         "description": "**Deletes a camera group from the user**",
-        "operationId": "add_camera_group_users_camera_group_delete_post",
+        "operationId": "delete_camera_group_users_camera_group_delete_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -11277,7 +11277,7 @@
           "users"
         ],
         "summary": "Update My Email",
-        "description": "**Gets the user's email address**",
+        "description": "**Updates the user's email address**",
         "operationId": "update_my_email_users_me_update_email_get",
         "security": [
           {
